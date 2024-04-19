@@ -1,0 +1,87 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif; 
+}
+
+.beauty {
+  display: flex;
+  height: 100vh;
+  background-size: cover;
+  box-shadow: inset 0 0 2000px rgba(19, 186, 198, 0.7);
+  /* background-image: url('../Assets/home-new-bg-free-img.jpg'); 
+  --background-transition: 0.3s;
+  --overlay-opacity: 0.49;
+  background-color: transparent;   */
+}
+
+.beauty-left {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+  padding-left: 150px;
+  /* line-height: 1.1; */
+  /* max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  align-items: center;
+  color: white; */
+}
+
+.beauty-left  h2 {
+  color: white;
+  font-size: 45px;
+  font-weight: 400;
+}
+
+.beauty-latest-button {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   gap: 15px;
+   width: 230px;
+   height: 50px;
+   border-radius: 75px;
+   margin-top: 0px;
+   margin-bottom: 40px;
+   background: white;
+   color: black;
+   font-size: 22px;
+   cursor: pointer;
+}
+
+.beauty-latest-button:hover{
+  background: rgb(174, 167, 167);
+}
+
+.beauty-latest-button:active{
+  background: rgb(238, 235, 235);
+  transform: scale(1.02);
+}
+.beauty-latest-button-on h2{
+  color: white;
+  margin-top: 20px;
+  margin-bottom: 15px;
+} 
+
+.beauty-latest-button-on button{
+  color: white;
+  text-decoration: none;
+  background-color: black;
+  padding: 12px 28px;
+  font-size: 18px;
+  border-radius: 5px;
+  cursor: pointer;
+} 
+.beauty-latest-button-on button:active{
+  color: black;
+  background-color: white;
+} 
+.beauty-latest-button-on button:hover{
+  transform: scale(1.1); 
+  color: rgb(99, 222, 238);
+} 
+

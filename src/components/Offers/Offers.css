@@ -1,0 +1,170 @@
+/* body,html{
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100vh;
+  font-family: sans-serif;
+} */
+.section-box{
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  height: 100vh;
+  /* padding: 0px 140px; */
+  /* margin-bottom: 90px;
+  margin-top: 90px;
+  margin-left: 220px; */
+  background: linear-gradient(180deg, #fde1ff, #5cd6d622 60%);
+  background-size: cover;
+  box-shadow: inset 0 0 2000px rgba(106, 225, 234, 0.7);
+}
+
+
+
+.Section_top{
+  width: 75%;
+  display: flex;
+  height: 80vh;
+  padding: 0px 140px;
+  margin-bottom: 70px;
+  margin-top: 50px;
+  margin-left: 180px;
+
+              /* margin: 0;
+              padding: 0; */
+              /* height: 100vh; */
+  font-family: sans-serif;
+                 /* width: 100%; */
+  overflow: hidden;
+  position: relative;
+  background-image: url('../Assets/background/banner-03.jpg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  text-align: center;
+  justify-content: center;
+  animation: change 10s infinite ease-in-out;
+}
+
+.content{
+  position: absolute;
+  top: 60%;
+  left: 25%;
+  transform: translate(-50%, -50%);
+  text-transform: uppercase;
+}
+
+.content h1{
+  color: #fff;
+  font-size: 45px;
+  font-weight: 700;
+  font-style: oblique;
+}
+.content h2{
+  color: #111;
+  font-size: 30px;
+  font-weight: 700;
+}
+.content button{
+  background: #083a60;
+  padding: 12px 27px;
+  font-size: 18px;
+  font-weight: 600;
+  border-radius: 20px;
+  cursor: pointer;
+  color: white;
+}
+.content button:hover{
+  background: #232526;
+  /* color: #f4fafb; */
+}
+
+@keyframes change{
+  10%
+  {
+      background-image: url('../Assets/background/banner-1.jpg');
+  }
+  30%
+  {
+      background-image: url('../Assets/background/banner-2.jpg');
+  }
+  50%
+  {
+      background-image: url('../Assets/background/blog-2.jpg');
+  }
+  70%
+  {
+      background-image: url('../Assets/background/shopping-single.jpg');
+  }
+  /* 120%
+  {
+      background-image: url('../Assets/background/men-fashion-free-img.jpg');
+  } */
+  /* 150%
+  {
+      background-image: url('../Assets/background/blog-4.jpg');
+  } */
+}
+
+
+/* * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif; 
+}
+
+
+.offers {
+  width: 65%;
+  display: flex;
+  height: 70vh;
+  padding: 0px 140px;
+  margin-bottom: 90px;
+  margin-top: 90px;
+  margin-left: 220px;
+  background: linear-gradient(180deg, #fde1ff, #e1ffea22 60%);
+  background-size: cover;
+  box-shadow: inset 0 0 2000px rgba(106, 225, 234, 0.7);
+}
+
+.offers-left {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.offers-left  h1{
+  color: White;
+  font-size: 40px;
+  font-weight: 300;
+}
+
+.offers-left  p{
+  color: rgb(231, 233, 222);
+  font-size: 22px;
+  font-weight: 600;
+  margin-top: 40px;
+}
+
+.offers-left button{
+   width: 200px;
+   height: 70px;
+   border-radius: 35px;
+   border: none;
+   margin-top: 30px;
+   background: rgb(195, 231, 52);
+   color: rgb(130, 88, 88);
+   font-size: 22px;
+   cursor: pointer;
+}
+
+.offers-right{
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-top: 50px;
+}
+ */
