@@ -1,6 +1,10 @@
+
+
 .productdisplay {
+  /* width: 100%; */
   display: flex;
-  margin: 0px 170px;
+  margin: 90px 120px;
+  background-color: #e6e4e4;
 }
 
 .productdisplay-left{
@@ -8,7 +12,7 @@
   gap: 17px;
 }
 
-.productdisplay-img-list{
+/* .productdisplay-img-list{
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -16,23 +20,37 @@
 
 .productdisplay-img-list img{
   height: 163px;
-}
+} */
 
 .productdisplay-main-img{
-  width: 586px;
-  height: 700px;
+  box-sizing: border-box;
+  margin-top: 180px;
+  /* width: 330px;
+  height: 50px; */
 }
 
 .productdisplay-right{
-  margin: 0px 70px;
+  margin: 0px 110px;
   display: flex;
   flex-direction: column;
 }
 
+.breadcrum{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #a4a0a0;
+  font-size: 16px;
+  font-weight: 450;
+  margin-top: 50px;
+  margin-bottom: 10px;
+  text-transform: capitalize;
+}
+
 .productdisplay-right h1{
   color: #3d3d3d;
-  font-size: 40px;
-  font-weight: 700;
+  font-size: 35px;
+  font-weight: 500;
 }
 
 .productdisplay-right-star{
@@ -83,11 +101,12 @@
 
 .productdisplay-right button{
   padding: 20px 40px;
-  width: 200px;
-  font-size: 16px;
+  width: 180px;
+  border-radius: 10px;
+  font-size: 17px;
   font-weight: 600;
-  color: white;
-  background: #ff4141;
+  color: rgb(21, 20, 20);
+  background: #41d3ff;
   margin-bottom: 40px;
   border: none;
   outline: none;
@@ -101,5 +120,27 @@
 
 .productdisplay-right-category span{
    font-weight: 600; 
+}
+
+/* Custom styles for the quantity input */
+.productdisplay-right-quantity {
+  margin-top: 50px;
+  margin-bottom: 1rem; /* Adds spacing below the quantity input */
+  display: flex; /* Align the label and input inline */
+  align-items: center; /* Vertically align the label and input */
+}
+
+.productdisplay-right-quantity label {
+  margin-right: 0.5rem; /* Adds spacing between the label and input */
+  font-weight: bold; /* Make the label text bold */
+  font-size: 1.2rem; /* Increase the font size of the label */
+}
+
+.productdisplay-right-quantity input {
+  width: 3rem; /* Width of the quantity input */
+  padding: 0.5rem; /* Padding inside the input field */
+  border: 2px solid #007BFF; /* Blue border color for visibility */
+  border-radius: 4px; /* Rounded corners */
+  font-size: 1rem; /* Font size for the input */
 }
 

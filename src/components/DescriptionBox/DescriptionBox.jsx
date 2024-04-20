@@ -6,7 +6,7 @@ const DescriptionBox = () => {
     <div className='descriptionbox'>
       <div className="discriptionbox-navigator">
         <div className="descriptionbox-nav-box">Description</div>
-        <div className="descriptionbox-nav-box fade">Reviews(122)</div>
+        {/* <div className="descriptionbox-nav-box fade">Reviews(122)</div> */}
       </div>
       <div className="descriptionbox-description">
         <p>The href attribute requires a valid value to be accessible. Provide a valid, navigable address as the href value. If you cannot provide a valid href, but still need the element to resemble a link, use a button and change it with appropriate styles.</p>

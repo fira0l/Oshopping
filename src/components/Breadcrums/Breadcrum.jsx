@@ -8,7 +8,7 @@ const Breadcrum = (props) => {
     <div className='breadcrum'>
       <div className='breadcrum'>
       Home <IoIosArrowForward /> Shop <IoIosArrowForward /> {product.category} <IoIosArrowForward /> 
-      {product.id}
+      {product.name}
     </div>                 
     </div>
   );
