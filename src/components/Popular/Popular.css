@@ -33,11 +33,11 @@
 
 .popular-item {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
   gap: 3rem; 
   padding: 0 2rem; 
 }
-
+/* 
 @media (min-width: 640px) {
   .popular-item {
       grid-template-columns: repeat(2, 1fr);
@@ -49,4 +49,4 @@
   .popular-item {
       grid-template-columns: repeat(4, 1fr);
   }
-}
+} */

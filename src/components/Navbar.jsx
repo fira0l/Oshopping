@@ -3,7 +3,19 @@ import './Navbar.css';
 import logo from './Assets/imagesAz/logo/icons8-shopping-bag-94.png';
 import cart_icon from './Assets/imagesAz/icons/icons8-shopping-cart-50.png';
 import { Link } from 'react-router-dom';
+import { useContext, useRef } from 'react';
+import { ShopContext } from '../Context/ShopContext';
+import { FaBars } from "react-icons/fa";
+
+
 const Navbar = () => {
+
+  const {getTotalCartCount} = useContext(ShopContext);
+  const menuRef = useRef();
+  const bar_toggle = (e) => {
+    menuRef.current.classList.toggle('nav-menu-visible');
+    e.target.classList.toggle('open');
+  }
     return (
 
     <div className='navbar'>
@@ -11,8 +23,8 @@ const Navbar = () => {
         <img src={logo} alt=''/>
         <p>OShop</p>
       </div>
-
-      <ul className='nav-menu'>
+      <FaBars onClick={bar_toggle}/>
+      <ul ref={menuRef} className='nav-menu'>
         <li><Link className='link' to='/'>Everything</Link></li>
         <li><Link className='link' to='/men'>Men</Link></li>
         <li><Link className='link' to='/women'>Women</Link></li>
@@ -24,7 +36,9 @@ const Navbar = () => {
         <Link className='link' to='/contactus'><h5 className='contact-us'>Contact Us</h5></Link>
         <Link to='/login'><button>Login</button></Link>
         <Link to='/cart'> <img src={cart_icon} alt=''/></Link>
-        <div className='nav-cart-count'>0</div>
+
+      <div className='nav-cart-count'> {getTotalCartCount()} </div>
+
       </div>
     </div>
   );

@@ -61,6 +61,16 @@
   background: rgb(238, 235, 235);
   transform: scale(1.02);
 }
+
+
+.beauty-latest-button-on p{
+  color: white;
+  font-size: 60px;
+  font-weight: 600;
+  margin-top: 20px;
+  margin-bottom: 15px;
+} 
+
 .beauty-latest-button-on h2{
   color: white;
   margin-top: 20px;

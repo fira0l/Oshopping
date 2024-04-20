@@ -1,11 +1,18 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import './ProductDisplay.css';
 import { GoStarFill } from "react-icons/go";
 import { GoStar } from "react-icons/go";
+import { ShopContext } from '../../Context/ShopContext';
+// import { useDispatch } from 'react-redux';
+// import { addtoCart } from '../redux/cartSlice';
 
 
 const ProductDisplay = (props) => {
+  
       const {product} = props;
+
+      const { addToCart } = useContext(ShopContext);
+      // const dispatch = useDispatch();
 
   return (
     <div className='productdisplay'>
@@ -46,7 +53,7 @@ const ProductDisplay = (props) => {
               <div>XL</div>
             </div>
           </div>
-          <button>Add To Cart</button>
+          <button onClick={()=>{addToCart(product.id)}}>Add To Cart</button>
           <p className="productdisplay-right-category"><span>Category :</span>Women, T-Shirt, Crop Top</p>
           <p className="productdisplay-right-category"><span>Tags :</span>Modern, Latest</p>
       </div>
@@ -55,3 +62,5 @@ const ProductDisplay = (props) => {
 }
 
 export default ProductDisplay;
+
+// <button onClick={() => dispatch(addtoCart({product}))}>Add To Cart</button>

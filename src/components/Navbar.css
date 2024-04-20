@@ -1,11 +1,12 @@
 .navbar{
+  width: 100%;
   display: flex;
   margin-left: 0px;/* justify-content: space-around; */
   padding: 0px;
-  background: rgb(12, 125, 169);
-  /* background-color: rgba(25, 141, 187, 0.8); */
   box-shadow: 0 1px 3px -2px rgb(7, 75, 102);
-   /* position: fixed;
+  background: rgb(12, 125, 169);
+  /* background-color: rgba(25, 141, 187, 0.8);
+   position: fixed;
    top: 0;
    z-index: 9999; */
 }
@@ -128,3 +129,37 @@
   color: white;
 
  }
+
+
+@media(max-with:1280px)
+{
+  .navbar{
+    padding: 12px 50px;
+  }
+  .nav-logo img{
+    width: 30px;
+  }
+
+  .nav-logo p{
+    font-size: 17px;
+  }
+  .nav-menu{
+    gap: 20px;
+    font-size: 10px;
+  }
+
+  .nav-login-cart{
+    gap: 30px;
+  }
+
+  .nav-login-cart button{
+    width: 120px;
+    height: 45px;
+    font-size: 16px;
+  }
+
+  .nav-cart-count{
+    margin-left: -40px;
+    font-size: 12px;
+  }
+}

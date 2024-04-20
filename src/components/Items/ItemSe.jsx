@@ -11,7 +11,7 @@ import { Link } from 'react-router-dom';
 const ItemSe = (props) => {
   return (
     <div className='item'>
-      <Link to={`/product/${props.id}`}><img className='item-imag' src={props.image} alt=''/></Link>
+      <Link to={`/product/${props.id}`}><img className='item-imag' src={props.image} alt='' onClick={window.scrollTo(0,0)}/></Link>
       <p>{props.name}</p>
       <div className="item-prices">
         

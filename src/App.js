@@ -12,10 +12,13 @@ import men_banner from './components/Assets/mens-banner.jpg';
 import women_banner from './components/Assets/womens-banner.jpg';
 import kids_banner from './components/Assets/kids-banner.jpg';
 import house_banner from './components/Assets/home-appliances-banner-1024x479.jpg';
+import { Provider } from 'react-redux';
+import store from './components/redux/store';
 
 
 function App() {
   return (
+  <Provider store={store}>
     <div> 
       <BrowserRouter>
        <Navbar/>
@@ -36,6 +39,7 @@ function App() {
         <Footer/>
         </BrowserRouter>
     </div>
+    </Provider>
   );
 }
 
