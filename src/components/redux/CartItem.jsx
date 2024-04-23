@@ -9,7 +9,7 @@ const CartItem = () => {
 
   return (
     <div className='cartitems'>
-      <h1>CART</h1>
+      <h1>Cart</h1>
       <div className="cartitems-format-main">
         <p>Products</p>
         <p>Title</p>
