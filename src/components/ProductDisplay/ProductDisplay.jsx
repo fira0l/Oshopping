@@ -32,12 +32,6 @@ const ProductDisplay = (props) => {
   return (
     <div className='productdisplay' >
       <div className="productdisplay-left">
-        {/* <div className="productdisplay-img-list">
-          <img src={product.image} alt="" />
-          <img src={product.image} alt="" />
-          <img src={product.image} alt="" />
-          <img src={product.image} alt="" />
-        </div> */}
         <div className="productdisplay-img">
           <img className='productdisplay-main-img' src={product.image} alt="" />
         </div>
@@ -54,7 +48,7 @@ const ProductDisplay = (props) => {
             <GoStarFill />
             <GoStarFill />
             <GoStar />
-            <p>(122)</p>
+            <p>(321)</p>
           </div>
           <div className="productdisplay-right-prices">
               <div className="productdisplay-right-price-old">${product.old_price}</div>

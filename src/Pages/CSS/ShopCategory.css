@@ -1,17 +1,17 @@
+/* Desktop and large screens */
 .shop-category {
   display: block;
-  margin: 30px auto;
+  margin: 0 auto;
   width: 100%;
   background: #e7e5e5;
 }
 
-.shopcategory-indexSort{
+.shopcategory-indexSort {
   display: flex;
-  margin: 0px 170px;
+  margin: 0 170px;
   justify-content: space-between;
   align-items: center;
 }
-/* shopCategory-banner */
 
 .shopcategory-sort {
   padding: 10px 20px;
@@ -24,12 +24,12 @@
 }
 
 .shopcategory-products {
-  margin: 20px 170px;
+  margin: 20px 50px;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  row-gap: 80px;
+  grid-template-columns: repeat(4, 1fr);
   gap: 30px;
 }
+
 .shopcategory-loadmore {
   display: flex;
   justify-content: center;
@@ -42,4 +42,71 @@
   color: #787878;
   font-size: 18px;
   font-weight: 500;
+}
+
+/* Responsive styles for tablets */
+@media (max-width: 1285px) {
+  .shopcategory-indexSort {
+    margin: 0 30px;
+  }
+
+  .shopcategory-products {
+    margin: 20px 20px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+}
+
+/* Responsive styles for phones */
+@media (max-width: 570px) {
+  .shopcategory-indexSort {
+    margin: 0 20px;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .shopcategory-products {
+    /* margin: 20px 20px; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+}
+
+@media (max-width: 774px) {
+  .shopcategory-indexSort {
+    margin: 0 20px;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+  }
+
+  .shopcategory-products {
+    margin-top: 20px;
+    margin-left: 50px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+}
+
+@media (max-width: 974px) {
+  .shopcategory-indexSort {
+    margin: 0 20px;
+    margin-right: 30px;
+    margin-left: 50px;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+  }
+
+  .shopcategory-products {
+    margin-top: 30px;
+    margin-left: 50px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+
 }

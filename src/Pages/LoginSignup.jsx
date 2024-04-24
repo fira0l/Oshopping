@@ -8,15 +8,15 @@ const LoginSignup = () => {
   return (
     <div className='body'  style={{backgroundImage: `url(${login_image})`}}>
       <div className="box">
-      <IoMdLock/>
          <span className="borderLine"></span>
         <form>
           <h2>Sign in</h2>
           <div className="inputBox">
-            <input type="text" required='requied'/>
-            <span>Username <FaUser/></span>   
+            <input type="text" pattern="^([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})|([a-zA-Z0-9._%+-]+)$" required='required' />
+            <span>Username or Email <FaUser/></span>   
             <i className='bx bxs-user'></i>
           </div>
+
           <div className="inputBox">
             <input type="password" required='requied'/>
             <span>Password <IoMdLock/></span>

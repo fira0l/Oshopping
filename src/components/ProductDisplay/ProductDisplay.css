@@ -1,33 +1,20 @@
-
-
 .productdisplay {
-  /* width: 100%; */
+  width: 100%;
   display: flex;
-  margin: 90px 120px;
   background-color: #e6e4e4;
   
 }
 
 .productdisplay-left{
-  display: flex;
   gap: 17px;
 }
 
-/* .productdisplay-img-list{
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.productdisplay-img-list img{
-  height: 163px;
-} */
 
 .productdisplay-main-img{
   box-sizing: border-box;
-  margin-top: 180px;
-  /* width: 330px;
-  height: 50px; */
+  margin-top: 100px;
+  margin-left: 10px;
+  margin-bottom: 20px;
 }
 
 .productdisplay-right{
@@ -80,7 +67,7 @@
   color: #ff4141;
 }
 
-.productdisplay-right-size h1{
+/* .productdisplay-right-size h1{
   margin-top: 55px;
   color: #656565;
   font-size: 20px;
@@ -98,7 +85,7 @@
   background: #fbfbfb;
   border-radius: 3px;
   cursor: pointer;
-}
+} */
 
 .productdisplay-right button{
   padding: 20px 40px;
@@ -123,25 +110,123 @@
    font-weight: 600; 
 }
 
-/* Custom styles for the quantity input */
 .productdisplay-right-quantity {
   margin-top: 50px;
-  margin-bottom: 1rem; /* Adds spacing below the quantity input */
-  display: flex; /* Align the label and input inline */
+  margin-bottom: 1rem; 
+  display: flex; 
   align-items: center; /* Vertically align the label and input */
 }
 
 .productdisplay-right-quantity label {
-  margin-right: 0.5rem; /* Adds spacing between the label and input */
-  font-weight: bold; /* Make the label text bold */
-  font-size: 1.2rem; /* Increase the font size of the label */
+  margin-right: 0.5rem; 
+  font-weight: bold;
+  font-size: 1.2rem; 
 }
 
 .productdisplay-right-quantity input {
-  width: 3rem; /* Width of the quantity input */
-  padding: 0.5rem; /* Padding inside the input field */
-  border: 2px solid #007BFF; /* Blue border color for visibility */
-  border-radius: 4px; /* Rounded corners */
-  font-size: 1rem; /* Font size for the input */
+  width: 3rem; 
+  padding: 0.5rem; 
+  border: 2px solid #007BFF; 
+  border-radius: 4px; 
+  font-size: 1rem; 
+} 
+
+
+
+
+
+@media (max-width: 639px) {
+  .productdisplay {
+    display: grid;
+    grid-template-rows: auto auto auto;
+    grid-gap: 20px;
+    margin: 0px;
+  }
+
+  .breadcrum {
+    grid-column: 1 / -1; /* Span the full width */
+  }
+
+  .productdisplay-left, .productdisplay-right {
+    grid-column: 1 / -1; /* Span the full width */
+    margin: 0;
+    margin-left: 20px;
+  }
+
+  /* Adjust the main image */
+  .productdisplay-main-img {
+    width: calc(100% - 50px); 
+    height: calc(100% - 80px); 
+    margin-left: 15px; 
+    padding-top: 0px; 
+    padding-right: 30px; 
+    padding-left: 30px; 
+    padding-bottom: 0px; 
+  }
+
+  /* Other adjustments for text content */
+  .productdisplay-right h1 {
+    font-size: 25px;
+  }
+
+  .productdisplay-right-prices {
+    font-size: 18px;
+  }
+
+  .productdisplay-right button {
+    padding: 15px 20px;
+    width: 160px; /* Full width of the container */
+  }
+
+  .productdisplay-right-quantity input {
+    width: 2rem;
+    padding: 0.3rem;
+    font-size: 0.8rem;
+  }
 }
 
+
+@media (min-width: 640px) and (max-width: 800px) {
+  .productdisplay {
+    display: grid;
+    grid-template-rows: auto auto;
+    grid-gap: 20px;
+    margin: 0px;
+  }
+
+  .productdisplay-left, .productdisplay-right {
+    grid-column: 1 / -1; /* Span the full width */
+    margin: 0;
+    margin-left: 20px;
+  }
+
+  .productdisplay-main-img {
+    width: calc(100% - 140px); 
+    height: calc(100% - 150px); 
+    margin-left: 20px; 
+    padding-top: 0px; 
+    padding-right: 50px; 
+    padding-left: 50px; 
+    padding-bottom: 0px; 
+  }
+
+  /* Other adjustments for text content */
+  .productdisplay-right h1 {
+    font-size: 30px;
+  }
+
+  .productdisplay-right-prices {
+    font-size: 20px;
+  }
+
+  .productdisplay-right button {
+    padding: 15px 20px;
+    width: 160px;
+  }
+
+  .productdisplay-right-quantity input {
+    width: 2.5rem;
+    padding: 0.4rem;
+    font-size: 0.9rem;
+  }
+}

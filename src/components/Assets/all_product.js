@@ -43,7 +43,7 @@ const all_product = [
   {
     id: "a1",
     image: a1,
-    name: "Men Black and Gray Athletic Cotton Socks - 6 Pairs",
+    name: "Men Black and Gray Cotton Socks - 6 Pairs",
     category: "men",
     new_price: 5.0,
     old_price: 8.0,
@@ -71,7 +71,7 @@ const all_product = [
   {
     id: "a3",
     image: a3,
-    name: "Electric Glass and Steel Hot Tea Water Kettle - 1.7-Liter",
+    name: "Electric Glass and Steel Hot Tea Water Kettle - 1.7L",
     category: "house",
     new_price: 30.7,
     old_price: 37.6,

@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import './CSS/ShopCategory.css';
 import { ShopContext } from '../Context/ShopContext';
-import dropdown_icon from '../components//Assets/imagesAz/icons/icons8-drop-down-30.png';
+import { MdKeyboardArrowRight } from "react-icons/md";
 import ItemSe from '../components/Items/ItemSe';
 
 const ShopCategory = (props) => {
@@ -12,11 +12,14 @@ const ShopCategory = (props) => {
       <img className='shopcategory-banner' src={props.banner} alt=''/>
       <div className="shopcategory-indexSort">
         <p>
-          <span>Showing 1-12</span> Out of 36 Products
+          {/* <span>Showing ___ </span> Out of ___ Products */}
         </p>
-        <div className="shopcategory-sort">
-          Sort by <img src={dropdown_icon} alt=''/>
-        </div>
+        <div className='group text-white w-fit px-6 py-3 my-2 flex   items-center rounded-md bg-gradient-to-r from-cyan-500 to-blue-500 cursor-pointer'> 
+                 Sort By
+                 <span className='group-hover:rotate-90 duration-300'>
+                   <MdKeyboardArrowRight size={25} className='ml-1'/>
+                </span>             
+         </div> 
       </div>
 
       <div className="shopcategory-products">
@@ -38,3 +41,14 @@ const ShopCategory = (props) => {
 }
 
 export default ShopCategory;
+
+
+
+// <div>
+//               <Link to='portfolio' smooth duration={500} className='group text-white w-fit px-6 py-3 my-2 flex items-center rounded-md bg-gradient-to-r from-cyan-500 to-blue-500 cursor-pointer'> 
+//                  Sort By
+//                  <span className='group-hover:rotate-90 duration-300'>
+//                    <MdKeyboardArrowRight size={25} className='ml-1'/>
+//                  </span>
+//               </Link>
+//             </div> 
