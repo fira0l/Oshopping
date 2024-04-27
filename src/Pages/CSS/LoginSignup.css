@@ -24,7 +24,7 @@
    overflow: hidden;
    padding-bottom: 30px;
  }
-/*  
+ 
  .box::before
  {
    content: '';
@@ -53,13 +53,16 @@
    animation: animate 6s linear infinite;
    animation-delay: -3s;
  }
-  */
+ 
+ 
  .borderLine {
    position: absolute;
    top: 0%;
    inset: 0%;
  }
-/*  
+
+
+ 
  .borderLine::before {
    content: '';
    position: absolute;
@@ -99,13 +102,13 @@
    {
      transform: rotate(360deg);
    }
- } */
+ } 
  
  .box form{
    position: absolute;
    inset: 4px;
-   background: rgba(142, 232, 240, 0.2);
-   /* background: #222; */
+   /* background: rgba(142, 232, 240, 0.2); */
+   background: #222;
    padding: 50px 40px;
    border-radius: 8px;
    z-index: 2;

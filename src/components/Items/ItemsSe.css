@@ -2,7 +2,7 @@
   width: 100px;
 }
 
-  .item-imag {
+.item-imag {
     max-width: 70%;
     max-height: 60%;
     display: block; 
@@ -66,6 +66,12 @@
 
 @media (max-width: 900px) {
   .item p {
-    width: 75%;
+    width: 60%;
+  }
+}
+
+@media (max-width: 1300px) {
+  .item p {
+    width: 60%;
   }
 }

@@ -243,13 +243,13 @@
   
   .hamburger-menu {
     display: block; 
-    padding-left: 200px;
+    padding-left: 80px;
     padding-top: 30px;
   }
   .nav-login-cart {
     display: flex;
     align-items: center;
-    margin-left: 40px;
+    margin-left: 90px;
     gap: 40px;
   }
 }
@@ -301,126 +301,3 @@
 }
 
 
-
-/* .navbar{
-  width: 100%;
-  display: flex;
-  margin-left: 0px;
-  padding: 0px;
-  box-shadow: 0 1px 3px -2px rgb(7, 75, 102);
-  background: rgb(12, 125, 169);
-  background-color: rgba(25, 141, 187, 0.8);
-   position: fixed;
-   top: 0;
-   z-index: 9999;
-}
- .nav-logo{
-  margin-left: 40px;
-  display: flex;
-  align-items: start; 
-  gap: 10px;
- }
-
- .nav-logo p{
-  color: #300101;
- 
-  margin-top: 22px;
-  font-size: 38px;
-  font-weight: 600;
-  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
- }
-
- .nav-menu{
-  display: flex;
-  align-items: center;
-  list-style: none;
-  gap: 30px;
-  margin-left: 80px;   
-  color: White;
-  font-size: 20px;
-  font-weight: 500;
- }
-  .link {
-    text-decoration: none;
-    color: white;
-    cursor: pointer;
-  }
-
-  .link:active {
-    color: black;
-  }
-
- .nav-menu li{
-  padding-left: 4px; 
-  padding-right: 4px;
-  cursor: pointer; 
-  font-weight: 500;
-  color: white; 
-  transition-duration: 0.2s; 
- }
-
- .nav-menu li:hover {
-  transform: scale(1.2); 
-}
-
-
- .nav-login-cart{
-  display: flex;
-  align-items: center;
-  margin-left: 380px;  
-  gap: 20px;
- }
-
- .nav-login-cart button{
-  width: 100px;
-  height: 40px;
-  outline: none;
-  border: 1px solid #12245f;
-  border-radius: 75px;
-  color: white;
-  font-size: 18px;
-  font-weight: 500;
-  background: rgb(117, 117, 204);
-  cursor: pointer;
- }
-
- .nav-login-cart button:active{
-  transform: scale(0.9); 
-  background: rgb(15, 15, 27);
- }
-
- .contact-us{
-    display: flex;
-    align-items: center;
-    list-style: none;
-    color: white;
-    font-size: 17px;
-    font-weight: 500;
-    cursor: pointer;
- }
-
- .contact-us:active {
-  transform: scale(1.2); 
-  color: rgb(28, 28, 55);
-}
-
-.contact-us:hover {
-  transform: scale(1.1); 
- 
-}
-
- .nav-cart-count {
-  width: 22px;
-  height: 22px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: -55px;
-  margin-left: 20px;
-  border-radius: 12px;
-  font-size: 14px;
-  background: blueviolet;
-  color: white;
-
- }
- */

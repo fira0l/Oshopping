@@ -101,6 +101,12 @@
   cursor: pointer;
 }
 
+
+.productdisplay-right button:active{
+  transform: scale(1.02);
+  background: #919fa3;
+}
+
 .productdisplay-right-category{
   margin-top: 10px;
 
@@ -130,6 +136,7 @@
   border-radius: 4px; 
   font-size: 1rem; 
 } 
+
 
 
 

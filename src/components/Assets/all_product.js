@@ -78,7 +78,7 @@ const all_product = [
     // rating: 5,
     keywords: [
       "water boiler",
-      "appliances",
+      "house",
       "kitchen"
     ]
   },
