@@ -1,0 +1,232 @@
+/* Checkout page container */
+.checkout {
+  /* display: flex; 
+  flex-direction: column;  */
+  margin: 100px 140px;
+}
+
+.error {
+  color: red;
+  font-size: 12px;
+}
+
+.checkout  h2{
+  margin-top: 0px;
+  text-align: center;
+  font-size: 60px;
+  margin-bottom: 40px;
+  font-weight: 500;
+  color: #555;
+}
+/* Login section */
+.return-check {
+  width: 100%; /* Full width */
+  margin-bottom: 40px; /* Space below return-check section */
+  border-bottom: 1px solid #ddd; /* Separation line */
+  padding-bottom: 20px; /* Padding bottom for space */
+}
+
+.return-check h1 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.return-check a {
+  color: rgb(91, 179, 234);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.inputBox {
+  display: flex;
+  margin-top: 20px;
+  margin-bottom: 0px;
+}
+
+.return-check .inputBox h1{
+  font-size: 16px;
+}
+
+.inputBox input {
+  width: 350px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-right: 10px;
+}
+
+.return-check p {
+  margin: 30px 0px;
+  font-size: 16px;
+}
+
+.inputBox .pass {
+  margin-left: 10px;
+}
+
+.return-check .btn {
+  background: rgb(91, 179, 234);
+  padding: 10px 20px;
+  color: white;
+  font-weight: 500;
+  font-size: 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin: 20px 0px;
+}
+
+.return-check .btn:hover {
+  background: rgb(80, 160, 210);
+}
+
+.return-check .links a {
+  color: rgb(91, 179, 234);
+  text-decoration: underline;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.lefty {
+  display: flex;
+}
+/* Layout for billing and order summary sections */
+.checkout-content {
+  display: flex; /* Flex layout for content */
+  justify-content: space-between; /* Space between children */
+  margin-top: 40px; /* Space between return-check and content */
+}
+
+/* Billing details section */
+.checkout-left {
+  width: 48%; /* Adjust width as needed */
+}
+
+.checkout-left h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.checkout-left form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.checkout-left .form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.checkout-left .form-group label {
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.checkout-left .form-group input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+
+
+/* Order summary and payment methods */
+.checkout-right {
+  width: 48%; 
+  margin-left: 60px;
+  margin-right: -20px;
+}
+
+.checkout-right .cartitems-total {
+  border: 1px solid #ccc;
+  padding: 20px;
+  border-radius: 4px;
+}
+
+.checkout-right .cartitems-total h1 {
+  font-size: 24px;
+  margin-bottom: 15px;
+}
+
+.checkout-right .cartitems-total-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.checkout-right .payment-methods {
+  margin-top: 20px;
+}
+
+.checkout-right .payment-methods .form-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.checkout-right .payment-methods label {
+  margin-left: 10px;
+}
+
+.checkout-right button {
+  background: rgb(91, 179, 234);
+  padding: 10px 20px;
+  color: white;
+  font-weight: 500;
+  font-size: 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.checkout-right button:hover {
+  background: rgb(80, 160, 210);
+}
+
+
+@media(max-width: 1050px) {
+  .checkout {
+    margin: 100px 40px;
+  }
+  /* .checkout-left {
+    width: 80%; 
+    margin-bottom: 40px;
+    justify-content: center;
+  }
+  .checkout-right {
+    width: 80%; 
+    margin-left: 20px;
+  } */
+  
+}
+
+@media(max-width: 850px) {
+  .checkout {
+    margin: 100px 40px;
+  }
+  .inputBox {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .inputBox .pass {
+    margin-left: 0px;
+  }
+  .lefty {
+    display: flex;
+    flex-direction: column;
+  }
+  .checkout-left {
+    width: 80%; 
+    margin-bottom: 40px;
+    justify-content: center;
+  }
+  .checkout-right {
+    width: 80%; 
+    margin-left: 20px;
+    /* margin-right: -20px; */
+  }
+  
+}

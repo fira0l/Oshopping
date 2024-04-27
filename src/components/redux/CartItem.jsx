@@ -2,10 +2,16 @@ import React, { useContext } from 'react';
 import './CartItems.css';
 import { ShopContext } from '../../Context/ShopContext';
 import { FaTimes } from 'react-icons/fa';
-
+import { useNavigate } from 'react-router-dom';
 
 const CartItem = () => {
    const {getTotalCartAmount, all_product, cartItems, removeFromCart} = useContext(ShopContext);
+
+   const navigate = useNavigate();
+    
+   const handleCheckout = () => {
+    navigate('/checkout');
+};
 
   return (
     <div className='cartitems'>
@@ -37,6 +43,14 @@ const CartItem = () => {
         return null;
       })}
       <div className="cartitems-down">
+      <div className="cartitems-couponcode">
+          <p>If you have a coupon code, please apply it</p>
+          <div className="cartitems-couponbox">
+            <input type="text" placeholder='coupon code' />
+            <button>Apply Coupon</button>
+          </div>
+        </div>
+
         <div className="cartitems-total">
           <h1>Cart Total</h1>
           <div>
@@ -55,15 +69,9 @@ const CartItem = () => {
               <h3>${getTotalCartAmount()}</h3>
             </div>
           </div>
-          <button>Proceed to Checkout</button>
+          <button onClick={handleCheckout}>Proceed to Checkout</button>
         </div>
-        <div className="cartitems-promocode">
-          <p>If you have promo code, Enter it here</p>
-          <div className="cartitems-promobox">
-            <input type="text" placeholder='promo code' />
-            <button>Submit</button>
-          </div>
-        </div>
+      
       </div>
     </div>
   );

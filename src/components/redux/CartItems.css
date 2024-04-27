@@ -67,8 +67,9 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  margin-right: 200px;
-  gap: 40px;
+  margin-right: 100px;
+  gap: 20px;
+  margin-top: -30px;
 }
 
 .cartitems-total-item
@@ -83,34 +84,34 @@
   height: 58px;
   outline: none;
   border: none;
-  background: #ff5a5a;
-  color: #fff;
+  background: #6dd4de;
+  color: #3f17df;
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
 }
 
-.cartitems-promocode
+.cartitems-couponcode
 {
   flex: 1;
   font-size: 16px;
   font-weight: 500;
 }
 
-.cartitems-promocode p{
+.cartitems-couponcode p{
   color: #555;
 
 }
 
-.cartitems-promobox {
-  width: 504px;
+.cartitems-couponbox {
+  width: 502px;
   margin-top: 15px;
   padding-left: 20px;
   height: 58px;
   background: #eaeaea;
 }
 
-.cartitems-promobox input{
+.cartitems-couponbox input{
   border: none;
   outline: none;
   background: transparent;
@@ -119,11 +120,11 @@
   height: 50px;
 }
 
-.cartitems-promobox button{
+.cartitems-couponbox button{
   width: 170px;
   height: 58px;
   font-size: 16px;
-  background: black;
+  background: rgb(57, 13, 202);
   color: white;
   cursor: pointer;
 }
@@ -162,15 +163,15 @@
     height: 45px;
     font-size: 13px;
   }
-  .cartitems-promobox{
+  .cartitems-couponbox{
     width: auto;
     max-width: 500px;
   }
-  .cartitems-promobox input {
+  .cartitems-couponbox input {
     width: 100%;
 
   }
-  .cartitems-promobox button {
+  .cartitems-couponbox button {
     width: 120px;
     margin-left: -125px;
   }

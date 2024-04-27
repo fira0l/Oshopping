@@ -14,6 +14,7 @@ import Footer from './components/Footer/Footer';
 // import house_banner from './components/Assets/home-appliances-banner-1024x479.jpg';
 import { Provider } from 'react-redux';
 import store from './components/redux/store';
+import Checkout from './Pages/Checkout';
 
 
 function App() {
@@ -34,6 +35,8 @@ function App() {
           <Route path='/contactus' element={<ContactUs/>}/>
           <Route path='/login' element={<LoginSignup/>}/>
           <Route path='/cart' element={<CartS/>}/>
+          <Route path='/checkout' element={<Checkout/>}/>
+          
 
         </Routes>  
         <Footer/>
