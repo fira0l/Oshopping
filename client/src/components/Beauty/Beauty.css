@@ -1,0 +1,161 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif; 
+}
+
+.beauty {
+  display: flex;
+  height: 100vh;
+  background-size: cover;
+  background-position: center;
+  box-shadow: inset 0 0 2000px rgba(19, 186, 198, 0.7);
+}
+
+.beauty-left {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+  padding-left: 150px;
+}
+
+.beauty-left  h2 {
+  color: white;
+  font-size: 45px;
+  font-weight: 400;
+}
+
+.beauty-latest-button {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   gap: 15px;
+   width: 230px;
+   height: 50px;
+   border-radius: 75px;
+   margin-top: 0px;
+   margin-bottom: 40px;
+   background: white;
+   color: black;
+   font-size: 22px;
+   cursor: pointer;
+}
+
+.beauty-latest-button:hover{
+  background: rgb(174, 167, 167);
+}
+
+.beauty-latest-button:active{
+  background: rgb(238, 235, 235);
+  transform: scale(1.02);
+}
+
+
+.beauty-latest-button-on p{
+  color: white;
+  font-size: 60px;
+  font-weight: 600;
+  margin-top: 20px;
+  margin-bottom: 15px;
+} 
+
+.beauty-latest-button-on h2{
+  color: white;
+  margin-top: 20px;
+  margin-bottom: 15px;
+} 
+
+.beauty-latest-button-on button{
+  color: white;
+  text-decoration: none;
+  background-color: black;
+  padding: 12px 28px;
+  font-size: 18px;
+  border-radius: 5px;
+  cursor: pointer;
+} 
+.beauty-latest-button-on button:active{
+  color: black;
+  background-color: white;
+} 
+.beauty-latest-button-on button:hover{
+  transform: scale(1.1); 
+  color: rgb(99, 222, 238);
+} 
+
+/* Media queries for responsiveness */
+@media (max-width: 920px) {
+  /* Adjust styles for tablets */
+  .beauty {
+    flex-direction: column;
+  }
+  
+  .beauty-left {
+    padding-left: 20px;
+    padding-top: 50px;
+    justify-content: flex-start;
+  }
+
+  .beauty-left h2 {
+    font-size: 40px;
+  }
+
+  .beauty-latest-button {
+    width: 170px;
+    height: 40px;
+    font-size: 15px;
+  }
+
+  .beauty-latest-button-on p {
+    padding-top: -10px;
+    font-size: 40px;
+  }
+
+  .beauty-latest-button-on h2 {
+    font-size: 40px;
+  }
+
+  .beauty-latest-button-on button {
+    padding: 10px 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Adjust styles for phones */
+  .beauty {
+    flex-direction: column;
+    height: auto;
+  }
+  
+  .beauty-left {
+    padding-left: 10px;
+    justify-content: flex-start;
+  }
+
+  .beauty-left h2 {
+    font-size: 24px;
+  }
+
+  .beauty-latest-button {
+    width: 140px;
+    height: 35px;
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  .beauty-latest-button-on p {
+    font-size: 30px;
+  }
+
+  .beauty-latest-button-on h2 {
+    font-size: 30px;
+  }
+
+  .beauty-latest-button-on button {
+    padding: 8px 15px;
+    font-size: 16px;
+  }
+}
