@@ -1,0 +1,21 @@
+type Query {
+    Users: [User]
+}
+
+type User {
+    user_id: ID!
+    first_name: String!
+    last_name: String!
+    username: String!
+    email: String!
+    passwordhash: String!
+    address: String
+    phone_number: Float
+    registration_date: String!
+    sellerid:[seller]
+}
+
+type seller{
+    sellerid:ID!
+}
+

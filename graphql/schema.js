@@ -21,6 +21,6 @@ type User {
     userLoggedIn: User # Subscription to notify when a user logs in
     userSignedUp: User # Subscription to notify when a new user signs up
   }
-
+  
 `);
   

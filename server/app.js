@@ -1,8 +1,22 @@
 const express = require("express");
 const app = express();
-const { Pool } = require("pg"); 
-require('dotenv').config(); 
+const path = require('path')
+const {buildSchema}= require("graphql")
+const {graphqlHTTP} =require('express-graphql')
+const {makeExecutableSchema}=require('@graphql-tools/schema')
+const {loadFilesSync} =require('@graphql-tools/load-files')
 
+
+
+const databases = require('../database/database')
+
+
+const typesArray = loadFilesSync(path.join(__dirname,'**/**/*.graphql'))
+const resolversArray = loadFilesSync(path.join(__dirname,'**/**/*.resolvers.js'))
+const schema = makeExecutableSchema({
+  typeDefs: typesArray,
+  resolvers: resolversArray,
+});
 
 // Middleware for logging requests
 app.use((req, res, next) => {
@@ -16,39 +30,13 @@ app.use((err, req, res, next) => {
   res.status(500).send("Something went wrong!");
 });
 
-app.get("/", (req, res) => {
-  res.send("<h1>Hello WORLD</h1>");
-});
+app.use('/graphql',graphqlHTTP({
+  schema:schema,
+  graphiql:true,
+}))
 
-// Create a PostgreSQL pool
-const pool = new Pool({
-  user: process.env.DB_USER,
-  host: process.env.DB_HOST,
-  database: process.env.DB_NAME,
-  password: process.env.DB_PASSWORD,
-  port: process.env.DB_PORT,
-});
-
-
-// Test the database connection
-pool.query("SELECT NOW()", (err, res) => {
-  if (err) {
-    console.error("Error connecting to the database:", err);
-  } else {
-    console.log("Connected to the database:", res.rows[0].now);
-  }
-});
-
-pool.query('SELECT * FROM users', (err, result) => {
-  if (err) {
-    console.error('Error executing query:', err);
-    return;
-  }
-  console.log('Query result:', result.rows);
-  
-  // Close the database connection (optional)
-  pool.end();
-});
+databases
+// databases.retriveUsers()
 
 const PORT = process.env.PORT || 3000;
 
