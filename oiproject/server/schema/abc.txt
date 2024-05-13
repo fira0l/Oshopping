@@ -1,0 +1,44 @@
+mutation{
+
+registerUser(username:"abc",lastName:"cde",firstName:"ghj",email:"ab@gmail.com",address:"na",password:"123"){
+  
+
+}
+
+const userQuery = await pool.query(
+      `SELECT * FROM users WHERE email = $1 OR username = $1`,
+      [emailOrUsername]
+    );
+    mutation {
+  
+ 
+  login(emailOrUsername:"abcd@gmail.com",password:"12345"){
+    
+   user{
+    user_id
+    email
+    first_name
+    username
+    last_name
+    phone_number
+    registration_date
+  }
+  }
+  
+}
+
+
+
+
+{
+  "data": {
+    "getSingleUsers": {
+      "username": "debz",
+      "user_id": "5",
+      "first_name": "dabala",
+      "last_name": "bekama",
+      "address": "Hana",
+      "phone_number": "09045544"
+    }
+  }
+}
