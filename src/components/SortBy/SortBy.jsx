@@ -9,7 +9,6 @@ const SortBy = ({ onSortChange }) => {
     { value: 'price_desc', label: 'Price: High to Low' },
     { value: 'name_asc', label: 'Name: A to Z' },
     { value: 'name_desc', label: 'Name: Z to A' },
-    // Add more sorting options as needed
   ];
 
   // State to track the visibility of the dropdown menu and the selected sorting option
@@ -30,9 +29,7 @@ const SortBy = ({ onSortChange }) => {
 
   return (
     <div className="relative inline-block">
-      {/* Sort By button */}
       <div className="shopcategory-indexSort flex justify-end">
-    {/* SortBy button */}
         <div
             className="group text-white w-fit px-6 py-3 flex items-center rounded-md bg-gradient-to-r from-cyan-500 to-blue-500 cursor-pointer"
             onClick={toggleDropdown}

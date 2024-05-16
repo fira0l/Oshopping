@@ -23,23 +23,12 @@ const ShopContextProvider = (props) => {
     setCartItems((prev) => {
         // Create a copy of the current cart state
         const updatedCart = { ...prev };
-        
         // Increment the quantity of the specified item
-        updatedCart[itemId] = (updatedCart[itemId] || 0) + 1;
-        
-        console.log(`Updated cart state:`, updatedCart);
-        
+        updatedCart[itemId] = (updatedCart[itemId] || 0) + 1;      
+        console.log(`Updated cart state:`, updatedCart);       
         return updatedCart;
     });
 };
-
-
-
-
-  // const removeFromCart = (itemId) => {
-  //   setCartItems((prev) => ({...prev,[itemId]:prev[itemId]-1}))
-  // }
- 
 
 
   const removeFromCart = (itemId) => {
@@ -52,14 +41,12 @@ const ShopContextProvider = (props) => {
         // Check if the item exists in the cart and has a quantity greater than zero
         if (updatedCart[itemId] > 0) {
             // Decrement the quantity of the specified item
-            updatedCart[itemId] -= 1;
-            
+            updatedCart[itemId] -= 1;      
             // Remove the item from the cart if its quantity reaches zero
             if (updatedCart[itemId] === 0) {
                 delete updatedCart[itemId];
             }
-        }
-        
+        }       
         console.log(`Updated cart state:`, updatedCart);
         
         return updatedCart;
@@ -83,7 +70,6 @@ const getTotalCartAmount = () => {
     }
   }
 
-  // Return the total cart amount
   return total;
 };
 
@@ -99,7 +85,6 @@ const getTotalCartCount = () => {
     }
   }
 
-  // Return the total number of items in the cart
   return totalItemCount;
 };
 
@@ -114,48 +99,3 @@ const getTotalCartCount = () => {
 }
 
 export default ShopContextProvider;
-
-
-
- 
-
-
-
-
-// import React, { createContext, useState } from "react";
-// import all_product from "../components/Assets/all_product";
-
-// export const ShopContext = createContext(null);
-
-// const getDefaultCart = () => {
-//   let cart = {};
-//   for (let index = 0; index < all_product.length+1; index++) {
-//     cart[index] = 0;
-//   }
-//   return cart;
-// }
-
-// const ShopContextProvider = (props) => {
-
-//   const [cartItems, setCartItems] = useState(getDefaultCart());
-
-
-//   const addToCart = (itemId) => {
-//     setCartItems((prev) => ({...prev,[itemId]:prev[itemId]+1}));
-//     console.log(cartItems);
-//   }
-
-//   const removeFromCart = (itemId) => {
-//     setCartItems((prev) => ({...prev,[itemId]:prev[itemId]-1}))
-//   }
-
-//   const contextValue = {all_product, cartItems, addToCart, removeFromCart};
-  
-//   return (
-//     <ShopContext.Provider value={contextValue}>
-//       {props.children}
-//     </ShopContext.Provider>
-//   )
-// }
-
-// export default ShopContextProvider;

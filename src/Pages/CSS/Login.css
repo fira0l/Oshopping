@@ -1,0 +1,174 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: sans-serif;
+}
+
+.body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 87vh;
+  background-size: cover;
+}
+
+.box {
+  position: relative;
+  width: 380px;
+  height: 480px;
+  border-radius: 8px;
+  overflow: hidden;
+  padding-bottom: 30px;
+  background: rgba(34, 34, 34, 0.7); /* Adjust transparency here */
+}
+
+.box form {
+  position: absolute;
+  inset: 4px;
+  background: rgba(66, 65, 65, 0.3); /* Adjust transparency here */
+  padding: 50px 40px;
+  border-radius: 8px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+}
+
+.box form h2 {
+  color: #fff;
+  font-weight: 500;
+  text-align: center;
+  letter-spacing: 0.1em;
+}
+
+.box form .inputBox {
+  position: relative;
+  width: 300px;
+  margin-top: 35px;
+}
+
+.box form .inputBox input {
+  position: relative;
+  width: 100px;
+  padding: 20px 10px 10px;
+  background: transparent;
+  outline: none;
+  border: none;
+  box-shadow: none;
+  color: #23242a;
+  font-size: 1em;
+  letter-spacing: 0.05em;
+  transition: 0.5s;
+  z-index: 10;
+}
+
+.box form .inputBox span {
+  position: absolute;
+  left: 0;
+  padding: 7px 10px 10px;
+  pointer-events: none;
+  color: #8f8f8f;
+  font-size: 1em;
+  letter-spacing: 0.05em;
+  transition: 0.5s;
+}
+
+.box form .inputBox input:valid ~ span,
+.box form .inputBox input:focus ~ span {
+  color: #fff;
+  font-size: 0.75em;
+  transform: translateY(-34px);
+}
+
+.box form .inputBox i {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 2px;
+  background: #fff;
+  border-radius: 4px;
+  overflow: hidden;
+  transition: 0.5s;
+  pointer-events: none;
+}
+
+.box form .inputBox input:valid ~ i,
+.box form .inputBox input:focus ~ i {
+  height: 44px;
+}
+
+.box form .links {
+  display: flex;
+  justify-content: space-between;
+}
+
+
+.box form .btn {
+  width: 100%;
+  height: 45px;
+  background: #fff;
+  border: none;
+  outline: none;
+  border-radius: 40px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  font-size: 16px;
+  color: #333;
+  font-weight: 600;
+}
+
+.box form .btn:active {
+  background-color: #45f3f5;
+  transform: scale(1.01);
+}
+
+.box form .register-link {
+  display: flex;
+  font-size: 14.5px;
+  text-align: center;
+  margin-top: 20px;
+  color: #5edca6;
+}
+
+.box form .register-link p {
+  display: inline-block; 
+}
+
+.box form .register-link h2 {
+  margin-left: 30px;
+  color: #5edca6;
+}
+
+.box form .register-link h2:hover {
+  color: #5e9bdc;
+}
+
+
+
+.register-link p {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 400;
+}
+
+
+.remember-forgot {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 35px;
+  margin-bottom: 30px;
+  font-size: 14px;
+}
+
+.remember-me {
+  color: #fff;
+}
+
+.forgot-password {
+  color: #5edca6;
+}
+
+.forgot-password:hover {
+  color: #5e9bdc;
+}

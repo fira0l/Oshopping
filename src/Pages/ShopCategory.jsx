@@ -2,8 +2,8 @@ import React, { useContext, useState } from 'react';
 import './CSS/ShopCategory.css';
 import { ShopContext } from '../Context/ShopContext';
 import ItemSe from '../components/Items/ItemSe';
-import SortBy from '../components/SortBy/SortBy'; // Import SortBy
-import { IoMdSearch } from "react-icons/io"; // Import IoMdSearch
+import SortBy from '../components/SortBy/SortBy'; 
+import { IoMdSearch } from "react-icons/io"; 
 
 const ShopCategory = (props) => {
     const { all_product } = useContext(ShopContext);
@@ -56,8 +56,6 @@ const ShopCategory = (props) => {
 
     return (
         <div className="shop-category">
-            {/* <img className="shopcategory-banner" src={props.banner} alt="Shop Banner" /> */}
-
             {/* Search and SortBy */}
             <div className="shopcategory-indexSort">
                 {/* Search input */}

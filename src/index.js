@@ -4,11 +4,25 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import ShopContextProvider from './Context/ShopContext';
+import { ApolloClient, InMemoryCache, ApolloProvider, gql } from '@apollo/client';
+
+// const client = new ApolloClient({
+//   uri: 'http://localhost:9000/graphql',
+//   cache: new InMemoryCache(),
+// });
+
+const client = new ApolloClient({
+  uri: 'https://flyby-router-demo.herokuapp.com/',
+  cache: new InMemoryCache(),
+});
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <ShopContextProvider>
-      <App />
+    <ApolloProvider client={client}>
+       <App />
+    </ApolloProvider>
    </ShopContextProvider>
 
   // <React.StrictMode>

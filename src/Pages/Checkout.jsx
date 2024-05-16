@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import './CSS/Checkout.css';
 import { ShopContext } from '../Context/ShopContext';
+import { Link } from 'react-router-dom';
 
 const Checkout = () => {
     const { getTotalCartAmount } = useContext(ShopContext);
@@ -165,7 +166,7 @@ const Checkout = () => {
                             Login
                         </button>
                         <div className="links">
-                            <a href="#">Forgot Password?</a>
+                          <Link to="/forgot">Forgot Password</Link>
                         </div>
                     </>
                 )}

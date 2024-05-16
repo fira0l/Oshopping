@@ -8,7 +8,7 @@ import { FaBars, FaTimes } from 'react-icons/fa';
 
 const Navbar = () => {
   const { getTotalCartCount } = useContext(ShopContext);
-  const [nav, setNav] = useState(false); // State variable to track menu visibility
+  const [nav, setNav] = useState(false); 
 
   // Function to toggle the navigation menu
   const toggleNav = () => {

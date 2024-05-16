@@ -1,11 +1,12 @@
 .item {
   width: 100px;
+  /* border: 1px #404040 solid; */
 }
 
 .item-imag {
-    max-width: 70%;
-    max-height: 60%;
-    display: block; 
+  max-width: 60%;
+  max-height: 45%;
+  display: block; 
 }
 
 
@@ -64,6 +65,8 @@
 }
 }
 
+
+
 @media (max-width: 900px) {
   .item p {
     width: 60%;
@@ -75,3 +78,4 @@
     width: 60%;
   }
 }
+

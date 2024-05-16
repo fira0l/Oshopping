@@ -18,12 +18,12 @@
   font-weight: 500;
   color: #555;
 }
-/* Login section */
+
 .return-check {
-  width: 100%; /* Full width */
-  margin-bottom: 40px; /* Space below return-check section */
-  border-bottom: 1px solid #ddd; /* Separation line */
-  padding-bottom: 20px; /* Padding bottom for space */
+  width: 100%; 
+  margin-bottom: 40px; 
+  border-bottom: 1px solid #ddd; 
+  padding-bottom: 20px; 
 }
 
 .return-check h1 {
@@ -80,7 +80,7 @@
   background: rgb(80, 160, 210);
 }
 
-.return-check .links a {
+.return-check .links{
   color: rgb(91, 179, 234);
   text-decoration: underline;
   font-size: 14px;

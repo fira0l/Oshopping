@@ -3,8 +3,6 @@ import './ProductDisplay.css';
 import { GoStarFill } from "react-icons/go";
 import { GoStar } from "react-icons/go";
 import { ShopContext } from '../../Context/ShopContext';
-// import { useDispatch } from 'react-redux';
-// import { addtoCart } from '../redux/cartSlice';
 import { IoIosArrowForward } from 'react-icons/io';
 
 const ProductDisplay = (props) => {
@@ -12,7 +10,6 @@ const ProductDisplay = (props) => {
       const {product} = props;
 
       const { addToCart } = useContext(ShopContext);
-      // const dispatch = useDispatch();
 
           // State to track the quantity of items to add to cart
     const [quantity, setQuantity] = useState(1);
@@ -55,17 +52,8 @@ const ProductDisplay = (props) => {
               <div className="productdisplay-right-price-new">${product.new_price}</div>         
           </div>
           <div className="productdisplay-right-description">
-            wofvnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnbi vbdjhb vjdfbvhndvkkkkk      bvejjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj
+            this product  is the best number 1 i am saying it    buy it or otherwise...
           </div>
-          {/* <div className="productdisplay-right-size">
-            <h1>Select Size</h1>
-            <div className="productdisplay-right-sizes">
-              <div>S</div>
-              <div>M</div>
-              <div>L</div>
-              <div>XL</div>
-            </div>
-          </div> */}
            {/* Quantity input */}
            <div className='productdisplay-right-quantity'>
                     <label htmlFor='quantity'>Quantity:</label>
@@ -87,5 +75,3 @@ const ProductDisplay = (props) => {
 }
 
 export default ProductDisplay;
-
-// <button onClick={() => dispatch(addtoCart({product}))}>Add To Cart</button>
