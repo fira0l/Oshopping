@@ -29,7 +29,7 @@ const Navbar = () => {
 
       {/* Navigation menu for desktop view */}
       <ul className={`nav-menu ${nav ? 'open' : ''}`}>
-        <li><Link className="link" to="/">All</Link></li>
+        <li><Link className="link" to="/">Home</Link></li>
         <li><Link className="link" to="/men">Men</Link></li>
         <li><Link className="link" to="/women">Women</Link></li>
         <li><Link className="link" to="/kids">Kids</Link></li>
@@ -48,7 +48,7 @@ const Navbar = () => {
       {/* Mobile menu */}
       {nav && (
         <ul className="mobile-menu">
-          <li><Link className="link" to="/" onClick={toggleNav}>All</Link></li>
+          <li><Link className="link" to="/" onClick={toggleNav}>Home</Link></li>
           <li><Link className="link" to="/men" onClick={toggleNav}>Men</Link></li>
           <li><Link className="link" to="/women" onClick={toggleNav}>Women</Link></li>
           <li><Link className="link" to="/kids" onClick={toggleNav}>Kids</Link></li>

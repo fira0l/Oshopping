@@ -12,6 +12,10 @@
   min-height: 87vh;
   background-size: cover;
 }
+.error {
+  color: red;
+}
+
 
 .box {
   position: relative;

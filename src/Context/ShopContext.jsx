@@ -1,101 +1,117 @@
-import React, { createContext, useState} from "react";
-import all_product from "../components/Assets/all_product";
+import React, { createContext, useState, useEffect } from "react";
+import { useQuery, gql } from '@apollo/client';
 
 export const ShopContext = createContext(null);
 
-
-const getDefaultCart = () => {
-  let cart ={};
-  for (let index = 0; index < all_product.length + 1; index++) {
-    cart[index] = 0;
+const GET_ALL_PRODUCTS_QUERY = gql`
+  query GetAllProducts {
+    products {
+      product_id
+      name
+      description
+      price
+      category_id
+      seller_id
+      stock_quantity
+      image
+      created_at
+    }
   }
-  return cart;
-}
+`;
 
 const ShopContextProvider = (props) => {
+  const [cartItems, setCartItems] = useState({});
+  const [user, setUser] = useState(null);
 
-  const [cartItems, setCartItems] = useState(getDefaultCart());
+  const { loading, error, data } = useQuery(GET_ALL_PRODUCTS_QUERY);
 
- 
+  useEffect(() => {
+    if (loading) console.log("Loading products...");
+    if (error) console.error("Error fetching products:", error);
+    if (data) console.log("Fetched products:", data);
+  }, [loading, error, data]);
+
+  useEffect(() => {
+    if (!loading && !error && data) {
+      setCartItems(getDefaultCart(data.products));
+    }
+  }, [loading, error, data]);
+
+  const getDefaultCart = (products) => {
+    let cart = {};
+    if (products) {
+      products.forEach(product => {
+        cart[product.product_id] = 0; // Set initial quantity to zero
+      });
+    }
+    return cart;
+  };
+
   const addToCart = (itemId) => {
-    console.log(`Adding item ${itemId} to cart`);
-    
     setCartItems((prev) => {
-        // Create a copy of the current cart state
-        const updatedCart = { ...prev };
-        // Increment the quantity of the specified item
-        updatedCart[itemId] = (updatedCart[itemId] || 0) + 1;      
-        console.log(`Updated cart state:`, updatedCart);       
-        return updatedCart;
+      const updatedCart = { ...prev };
+      updatedCart[itemId] = (updatedCart[itemId] || 0) + 1;
+      return updatedCart;
     });
-};
-
+  };
 
   const removeFromCart = (itemId) => {
-    console.log(`Removing item ${itemId} from cart`);
-    
     setCartItems((prev) => {
-        // Create a copy of the current cart state
-        const updatedCart = { ...prev };
-        
-        // Check if the item exists in the cart and has a quantity greater than zero
-        if (updatedCart[itemId] > 0) {
-            // Decrement the quantity of the specified item
-            updatedCart[itemId] -= 1;      
-            // Remove the item from the cart if its quantity reaches zero
-            if (updatedCart[itemId] === 0) {
-                delete updatedCart[itemId];
-            }
-        }       
-        console.log(`Updated cart state:`, updatedCart);
-        
-        return updatedCart;
+      const updatedCart = { ...prev };
+      if (updatedCart[itemId] > 0) {
+        updatedCart[itemId] -= 1;
+        if (updatedCart[itemId] === 0) {
+          delete updatedCart[itemId];
+        }
+      }
+      return updatedCart;
     });
-};
+  };
 
-
-const getTotalCartAmount = () => {
-  let total = 0;
-
-  // Iterate through each item in cartItems
-  for (const itemId in cartItems) {
-    if (cartItems.hasOwnProperty(itemId) && cartItems[itemId] > 0) {
-      // Find the corresponding product in all_product by its id
-      const itemInfo = all_product.find((product) => product.id === itemId);
-      
-      // If itemInfo is found, add the total price of this item to the total cart amount
-      if (itemInfo) {
-        total += itemInfo.new_price * cartItems[itemId];
+  const getTotalCartAmount = () => {
+    let total = 0;
+    for (const itemId in cartItems) {
+      if (cartItems.hasOwnProperty(itemId) && cartItems[itemId] > 0) {
+        const itemInfo = data.products.find((product) => product.product_id === itemId);
+        if (itemInfo) {
+          total += itemInfo.price * cartItems[itemId];
+        }
       }
     }
-  }
+    return total;
+  };
 
-  return total;
-};
-
-
-const getTotalCartCount = () => {
-  let totalItemCount = 0;
-
-  // Iterate through each item in cartItems
-  for (const itemId in cartItems) {
-    if (cartItems.hasOwnProperty(itemId)) {
-      // Add the quantity of the current item to totalItemCount
-      totalItemCount += cartItems[itemId];
+  const getTotalCartCount = () => {
+    let totalItemCount = 0;
+    for (const itemId in cartItems) {
+      if (cartItems.hasOwnProperty(itemId)) {
+        totalItemCount += cartItems[itemId];
+      }
     }
-  }
+    return totalItemCount;
+  };
 
-  return totalItemCount;
-};
+  const clearCart = () => {
+    setCartItems({});
+  };
 
-
-  const contextValue = {getTotalCartCount, getTotalCartAmount, all_product, cartItems, addToCart, removeFromCart};
+  const contextValue = {
+    getTotalCartCount,
+    getTotalCartAmount,
+    allProducts: data ? data.products : [],
+    cartItems,
+    addToCart,
+    removeFromCart,
+    user,
+    setUser,
+    clearCart
+  };
 
   return (
     <ShopContext.Provider value={contextValue}>
       {props.children}
     </ShopContext.Provider>
-  )
-}
+  );
+};
 
 export default ShopContextProvider;

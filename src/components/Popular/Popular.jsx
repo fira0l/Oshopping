@@ -1,21 +1,36 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { ShopContext } from '../../Context/ShopContext';
+import { Link } from 'react-router-dom';
 import './Popular.css';
-import data_product from '../Assets/data';
-import Items from '../Items/Items';
 
 const Popular = () => {
+  const { allProducts } = useContext(ShopContext);
+
+  // Filter products by category ID 1
+  const filteredProducts = allProducts.filter(product => parseInt(product.category_id) === 1);
+
+  console.log("Filtered Products:", filteredProducts); // Debugging
+
   return (
     <div className='popular'>
       <h1>Featured Products</h1>
       <div className='popular-item'>
-        {data_product.map((item, i) =>{
-          return <Items key={i} id={item.id} name={item.name} image={item.image} new_price={item.new_price} old_price={item.old_price} />
-        })}
+        {filteredProducts.length > 0 ? (
+          filteredProducts.map(product => (
+            <div key={product.product_id} className='product-card'>
+              <Link to={`/product/${product.product_id}`}>
+                <img src={product.image} alt={product.name} />
+                <h2>{product.name}</h2>
+                <p>Price:  {product.price}Birr</p>
+              </Link>
+            </div>
+          ))
+        ) : (
+          <p>No products found for category ID 1.</p>
+        )}
       </div>
-      
     </div>
   );
-}
+};
 
 export default Popular;
-

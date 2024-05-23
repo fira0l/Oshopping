@@ -1,19 +1,24 @@
 import React, { useContext } from 'react';
 import { ShopContext } from '../Context/ShopContext';
-import {useParams} from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import ProductDisplay from '../components/ProductDisplay/ProductDisplay';
-import DescriptionBox from '../components/DescriptionBox/DescriptionBox';
-
 
 const Products = () => {
-  const {all_product} = useContext(ShopContext);
-  const {productId} = useParams();
-  const product = all_product.find((e)=> e.id === String(productId));
+  const { allProducts } = useContext(ShopContext);
+  const { productId } = useParams();
+
+  // console.log("Product ID from URL:", productId);
+  // console.log("All products:", allProducts);
+
+  const product = allProducts.find((e) => e.product_id === productId);
+
+  if (!product) {
+    return <div>Product not found</div>;
+  }
 
   return (
     <div>
       <ProductDisplay product={product}/>
-      <DescriptionBox />
     </div>
   );
 }

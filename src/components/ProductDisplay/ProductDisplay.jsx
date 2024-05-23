@@ -1,77 +1,66 @@
 import React, { useContext, useState } from 'react';
 import './ProductDisplay.css';
-import { GoStarFill } from "react-icons/go";
-import { GoStar } from "react-icons/go";
 import { ShopContext } from '../../Context/ShopContext';
 import { IoIosArrowForward } from 'react-icons/io';
+import { Link } from 'react-router-dom';
 
-const ProductDisplay = (props) => {
+const ProductDisplay = ({ product }) => {
+  const { addToCart } = useContext(ShopContext);
+  const [quantity, setQuantity] = useState(1);
+
+  const handleQuantityChange = (event) => {
+    const value = parseInt(event.target.value, 10);
+    if (!isNaN(value) && value > 0) {
+      setQuantity(value);
+    } else {
+      setQuantity(1);
+    }
+  };
+
+  const handleAddToCart = () => {
+    for (let i = 0; i < quantity; i++) {
+      addToCart(product.product_id, 1); // Add one item to the cart 'quantity' times
+    }
+    setQuantity(1); // Reset quantity after adding to cart
+  };
   
-      const {product} = props;
-
-      const { addToCart } = useContext(ShopContext);
-
-          // State to track the quantity of items to add to cart
-    const [quantity, setQuantity] = useState(1);
-
-    // Function to handle quantity change
-    const handleQuantityChange = (event) => {
-        const value = parseInt(event.target.value, 10);
-        // Ensure the value is at least 1
-        if (value > 0) {
-            setQuantity(value);
-        } else {
-            setQuantity(1);
-        }
-    };
-    
 
   return (
-    <div className='productdisplay' >
+    <div className='productdisplay'>
       <div className="productdisplay-left">
         <div className="productdisplay-img">
-          <img className='productdisplay-main-img' src={product.image} alt="" />
+          <img className='productdisplay-main-img' src={product.image} alt={product.name} />
         </div>
       </div>
       <div className="productdisplay-right">
-          <div className='breadcrum'>
-          Home <IoIosArrowForward /> Shop <IoIosArrowForward /> {product.category} <IoIosArrowForward /> 
-          {product.name}
-        </div>  
-          <h1>{product.name}</h1>
-          <div className="productdisplay-right-star">
-            <GoStarFill />
-            <GoStarFill />
-            <GoStarFill />
-            <GoStarFill />
-            <GoStar />
-            <p>(321)</p>
-          </div>
-          <div className="productdisplay-right-prices">
-              <div className="productdisplay-right-price-old">${product.old_price}</div>
-              <div className="productdisplay-right-price-new">${product.new_price}</div>         
-          </div>
-          <div className="productdisplay-right-description">
-            this product  is the best number 1 i am saying it    buy it or otherwise...
-          </div>
-           {/* Quantity input */}
-           <div className='productdisplay-right-quantity'>
-                    <label htmlFor='quantity'>Quantity:</label>
-                    <input
-                        type='number'
-                        id='quantity'
-                        min='1'
-                        value={quantity}
-                        onChange={handleQuantityChange}
-                    />
-                </div>
-
-          <button onClick={()=>{addToCart(product.id, quantity)}}>Add To Cart</button>
-          <p className="productdisplay-right-category"><span>Category :</span>Women, T-Shirt, Crop Top</p>
-          <p className="productdisplay-right-category"><span>Tags :</span>Modern, Latest</p>
+        <div className='breadcrum'>
+          <Link to="/">Home</Link> <IoIosArrowForward /> 
+          <Link to="/shop">Shop</Link> <IoIosArrowForward /> 
+          <Link to={`/category/${product.category_id}`}>{product.category_id}</Link> <IoIosArrowForward /> 
+          <span>{product.name}</span>
+        </div>
+        <h1>{product.name}</h1>
+        <div className="productdisplay-right-prices">
+          <div className="productdisplay-right-price-new">{product.price}Birr</div>
+        </div>
+        <div className="productdisplay-right-description">
+          {product.description}
+        </div>
+        <div className='productdisplay-right-quantity'>
+          <label htmlFor='quantity'>Quantity:</label>
+          <input
+            type='number'
+            id='quantity'
+            min='1'
+            value={quantity}
+            onChange={handleQuantityChange}
+          />
+        </div>
+        <button onClick={handleAddToCart}>Add To Cart</button>
+        <p className="productdisplay-right-category"><span>Category :</span> {product.category_id}</p>
       </div>
     </div>
   );
-}
+};
 
 export default ProductDisplay;

@@ -9,7 +9,6 @@ const Offers = () => {
         <h1>Exclusive Offers</h1>
         <h1>For You</h1>
         <h2>ONLY ON BEST SELLERS PRODUCTS</h2>
-        <button>Check Now</button>
       </div>
     </div>
     </div>

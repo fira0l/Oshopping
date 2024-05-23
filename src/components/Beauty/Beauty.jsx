@@ -8,11 +8,10 @@ const Beauty = () => {
       <div className='beauty-left'>
         <div className='beauty-latest-button-on'>
             <div>
-              <p>Raining Offers For</p>
-              <p>Cold Winter!</p>
-              <h2>20-30% Off</h2>
+              <p>Welcome to Oshop</p>
+              <p>Shop With Us </p>
+              <h2>Enjoy your stay</h2>
             </div>
-              <button>Shop Now</button>
           </div>
       </div>
     </div>
