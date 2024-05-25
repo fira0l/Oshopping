@@ -1,0 +1,52 @@
+:root {
+  --color-212529: #212521;
+  --color-ffd333: #ffd333;
+  --color-47ad24: #47ad24;
+  --color-e52e2e: #e52e2e;
+  --color-828599: #828599;
+  --color-3d464d: #ed464d;
+  --color-c3d4da: #c3d4da;
+  --color-333333: #333333;
+
+
+  /* rgb(51, 51, 51) */
+}
+
+.green {
+  color: var( --color-47ad24);
+  font-size: 14px;
+}
+
+.red {
+  color: var(--color-212529);
+  font-size: 14px;
+
+}
+
+.quill{
+  background-color: white;
+}
+
+.form-control {
+  box-shadow: 10px 5px 10px #4a91a9;
+  border-color: rgb(28, 132, 161);
+  
+}
+
+.title {
+  font: 28px;
+  font-family: 'Times New Roman', Times, serif !important;
+  color: var(--color-212529);
+}
+
+
+.sub-title {
+  font: 28px;
+  font-family: 'Times New Roman', Times, serif !important;
+  color: var(--color-212529);
+}
+
+.desc {
+  font: 14px;
+  color: var(--color-828599);
+}
