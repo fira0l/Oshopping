@@ -1,5 +1,5 @@
 import React from 'react';
-import { useQuery,  gql } from '@apollo/client';
+import { useQuery, gql } from '@apollo/client';
 import { Table, Tag } from 'antd';
 import moment from 'moment';
 
@@ -12,7 +12,7 @@ const GET_ORDERS_QUERY = gql`
       order_date
       quantity
       shipping_address
-      shipping_city
+      shipping_city 
       user {
         email
       }
@@ -25,8 +25,7 @@ const GET_ORDERS_QUERY = gql`
   }
 `;
 
-
-const Orders = () => {
+const RecentOrders = () => {
   const { loading, error, data } = useQuery(GET_ORDERS_QUERY);
 
   if (loading) return <p>Loading...</p>;
@@ -50,7 +49,6 @@ const Orders = () => {
     return 'Processing';
   };
 
-
   // Group orders by order_new_id
   const groupedOrders = data.orderNews.reduce((acc, order) => {
     const orderId = order.order_new_id;
@@ -64,7 +62,7 @@ const Orders = () => {
         totalQuantity: 0,
         order_date: order.order_date,
         shipping_address: order.shipping_address,
-        shipping_city: order.shipping_city,
+        shipping_city:order.shipping_city ,
         statusHistory: statusTimeline.map(({ status, daysOffset }) => ({
           status,
           date: moment(order.order_date).add(daysOffset, 'days').format('YYYY-MM-DD'),
@@ -92,6 +90,10 @@ const Orders = () => {
       statusHistory: order.statusHistory,
     };
   });
+
+  // Filter the data to show only orders from the past 2 days
+  const twoDaysAgo = moment().subtract(2, 'days');
+  formattedData = formattedData.filter((order) => moment(order.order_date).isAfter(twoDaysAgo));
 
   // Sort the data from most recent to oldest
   formattedData.sort((a, b) => moment(b.order_date).diff(moment(a.order_date)));
@@ -155,10 +157,6 @@ const Orders = () => {
       dataIndex: 'totalAmount',
     },
     {
-      title: 'Total Quantity',
-      dataIndex: 'totalQuantity',
-    },
-    {
       title: 'Order Date',
       dataIndex: 'order_date',
       render: (orderDate) => moment(orderDate).format('YYYY-MM-DD'),
@@ -168,21 +166,9 @@ const Orders = () => {
       dataIndex: 'shipping_address',
     },
     {
-      title: 'shipping_city',
+      title: 'City',
       dataIndex: 'shipping_city',
     },
-    // {
-    //   title: 'Actions',
-    //   render: (text, record) => (
-    //     <Button
-    //       type="primary"
-    //       danger
-    //       onClick={() => handleDelete(record.order_new_id)}
-    //     >
-    //       Delete
-    //     </Button>
-    //   ),
-    // },
   ];
 
   const expandedRowRender = (record) => (
@@ -198,7 +184,7 @@ const Orders = () => {
 
   return (
     <div>
-      <h3 className='mb-4 title'>Orders</h3>
+      <h3 className='mb-4 title'>Recent Orders</h3>
       <div>
         <Table
           columns={columns}
@@ -210,4 +196,4 @@ const Orders = () => {
   );
 };
 
-export default Orders;
+export default RecentOrders;

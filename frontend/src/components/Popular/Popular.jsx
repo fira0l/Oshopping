@@ -14,6 +14,7 @@ const Popular = () => {
   return (
     <div className='popular'>
       <h1>Featured Products</h1>
+      <h3>This Summer 30% Off</h3>
       <div className='popular-item'>
         {filteredProducts.length > 0 ? (
           filteredProducts.map(product => (

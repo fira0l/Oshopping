@@ -72,7 +72,7 @@
 }
 
 /* Responsive design for smaller screens */
-@media (max-width: 700) {
+/* @media (max-width: 700) {
   .pop-inner {
     width: 80%;
   }
@@ -89,4 +89,4 @@
     margin-left: -10px;
 
   }
-}
+} */

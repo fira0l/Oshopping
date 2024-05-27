@@ -21,6 +21,7 @@ const orderTypeDefs = gql`
   extend type Query {
     orderNew(id: ID!): OrderNew
     orderNews: [OrderNew]
+    orderNewsByUserId(user_id: ID!): [OrderNew] # New query definition
   }
 
   extend type Mutation {

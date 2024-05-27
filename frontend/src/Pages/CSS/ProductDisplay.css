@@ -70,6 +70,11 @@
   cursor: pointer;
 }
 
+.productdisplay-right button:disabled {
+  background: red; 
+  cursor: not-allowed; 
+}
+
 .productdisplay-right button:active {
   transform: scale(1.02);
   background: #919fa3;
@@ -110,6 +115,10 @@
   font-weight: bold;
   margin-bottom: 20px;
 }
+.error-message {
+  color: red;
+}
+
 
 
 @media (max-width: 639px) {

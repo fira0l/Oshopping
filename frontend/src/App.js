@@ -31,7 +31,7 @@ function App() {
           <Route path='/checkout' element={<Checkout/>}/>
           <Route path='/signup' element={<SignupPage/>}/>
           <Route path='/forgot' element={<ForgotP/>}/>
-
+          
         </Routes>  
         <Footer/>
         </BrowserRouter>
@@ -41,5 +41,7 @@ function App() {
 }
 
 export default App;
+
+
 
 

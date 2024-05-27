@@ -26,6 +26,19 @@ const orderResolvers = {
         throw error;
       }
     },
+    orderNewsByUserId: async (_, { user_id }) => { // Resolver for orderNewsByUserId
+      try {
+        const orders = await db.any('SELECT * FROM order_new WHERE user_id = $1', [user_id]);
+        orders.forEach(order => {
+          order.order_date = new Date(order.order_date).toISOString().slice(0, 10);
+        });
+        return orders;
+      } catch (error) {
+        console.error('Error fetching orders by user ID:', error);
+        throw error;
+      }
+    },
+    
   },
   Mutation: {
     orderProduct: async (_, args) => {

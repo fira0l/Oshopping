@@ -1,9 +1,9 @@
 import React from 'react';
-import { Column } from '@ant-design/plots';
-import { GoArrowDownRight } from "react-icons/go";
-import { Table } from 'antd';
 import { useQuery, gql } from '@apollo/client';
 import moment from 'moment';
+import Highcharts from 'highcharts';
+import HighchartsReact from 'highcharts-react-official';
+import RecentOrders from './RecentOrders';
 
 const GET_ORDERS_QUERY = gql`
   query GetOrders {
@@ -20,128 +20,111 @@ const GET_ORDERS_QUERY = gql`
 `;
 
 const Dashboard = () => {
-  const { loading, error, data } = useQuery(GET_ORDERS_QUERY);
+  // Query for orders
+  const { loading: ordersLoading, error: ordersError, data: ordersData } = useQuery(GET_ORDERS_QUERY);
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
+  // Handle loading and error states
+  if (ordersLoading) return <p>Loading...</p>;
+  if (ordersError) return <p>Error: {ordersError.message}</p>;
 
-  const columns = [
-    {
-      title: 'SNo', // Change column title to 'SNo'
-      dataIndex: 'key', // Use the key property for serial numbers
-    },
-    {
-      title: 'Status',
-      dataIndex: 'status',
-    },
-    {
-      title: 'Total Amount',
-      dataIndex: 'total_amount',
-    },
-    {
-      title: 'User ID',
-      dataIndex: ['user', 'user_id'],
-    },
-    {
-      title: 'Order Date',
-      dataIndex: 'order_date',
-    },
-  ];
+  // Ensure ordersData is defined
+  const orderNews = ordersData?.orderNews || [];
 
-  const formattedData = data.orderNews.map((order, index) => ({
-    key: index + 1, // Change key to incrementing numbers
-    ...order,
-    // Format order_date to a human-readable format (e.g., 'YYYY-MM-DD')
-    order_date: moment(order.order_date).format('YYYY-MM-DD'),
+  // Group orders by date
+  const startDate = moment().subtract(4, 'days').format('YYYY-MM-DD');
+  const endDate = moment().format('YYYY-MM-DD');
+  const orderStatsByDate = orderNews.reduce((acc, order) => {
+    const date = moment(order.order_date).format('YYYY-MM-DD');
+    if (acc[date]) {
+      acc[date].count++;
+      acc[date].totalAmount += order.total_amount;
+      acc[date].users.add(order.user.user_id);
+    } else {
+      acc[date] = {
+        count: 1,
+        totalAmount: order.total_amount,
+        users: new Set([order.user.user_id])
+      };
+    }
+    return acc;
+  }, {});
+
+  // Fill in missing dates with zero count, total amount, and users
+  const currentDate = moment(startDate);
+  while (currentDate.isSameOrBefore(endDate)) {
+    const date = currentDate.format('YYYY-MM-DD');
+    if (!orderStatsByDate[date]) {
+      orderStatsByDate[date] = { count: 0, totalAmount: 0, users: new Set() };
+    }
+    currentDate.add(1, 'day');
+  }
+
+  // Convert order data to required format
+  const formattedOrderData = Object.entries(orderStatsByDate).map(([date, stats]) => ({
+    name: date,
+    count: stats.count,
+    totalAmount: stats.totalAmount,
+    users: stats.users.size,
   }));
 
-  const chartData = [
-    { month: '1', value: 1078 },
-    { month: '2', value: 1216 },
-    { month: '3', value: 758 },
-    { month: '4', value: 623 },
-    { month: '5', value: 319 },
-    { month: '6', value: 422 },
-    { month: '7', value: -4 },
-    { month: '8', value: -217 },
-    { month: '9', value: -358 },
-    { month: '10', value: 1513 },
-    { month: '11', value: 1388 },
-    { month: '12', value: 597 },
-  ];
-
-  const config = {
-    data: chartData,
-    xField: 'month',
-    yField: 'value',
-    scale: {
-      y: {
-        domainMax: 2000,
-        domainMin: -1000,
-      },
+  // Spline chart options for orders, users, and amount
+  const splineChartOptions = {
+    chart: {
+      type: 'spline',
     },
-    axis: {
-      x: {
-        labelFormatter: (val) => `${val} Month`,
-      },
+    title: {
+      text: 'Orders, Total Amount, and Number of Users Registered',
+      align: 'left',
     },
-    annotations: [
-      {
-        type: 'rangeX',
-        data: [{ month: ['7', '9'] }],
-        xField: 'month',
+    subtitle: {
+      text: `Total Amount: Birr ${formattedOrderData.reduce((total, item) => total + item.totalAmount, 0).toFixed(2)} | Number of Orders: ${formattedOrderData.reduce((total, item) => total + item.count, 0)} | Total Number of Users: ${formattedOrderData.reduce((total, item) => total + item.users, 0)}`,
+      align: 'left',
+    },
+    xAxis: {
+      categories: formattedOrderData.map(item => item.name),
+    },
+    yAxis: [{
+      title: {
+        text: 'Number of Orders',
       },
-    ],
+    }, {
+      title: {
+        text: 'Total Amount',
+        opposite: true,
+      },
+    }, {
+      title: {
+        text: 'Number of Users',
+        opposite: true,
+      },
+    }],
+    series: [{
+      name: 'Number of Orders',
+      data: formattedOrderData.map(item => item.count),
+      yAxis: 0,
+    }, {
+      name: 'Total Amount',
+      data: formattedOrderData.map(item => item.totalAmount),
+      yAxis: 1,
+    }, {
+      name: 'Number of Users',
+      data: formattedOrderData.map(item => item.users),
+      yAxis: 2,
+    }],
   };
 
+  // JSX to render charts in the Dashboard component
   return (
     <div>
       <h3 className='mb-4 title'>Dashboard</h3>
-      <div className='d-flex justify-content-between align-items-center gap-3'>
-        <div className='d-flex justify-content-between align-items-end flex-grow-1 bg-white p-3 rounded-3'>
-          <div>
-            <p className='desc'>Total</p> 
-            <h4 className='mb-0 sub-title'>$300</h4>
-          </div>
-          <div className='d-flex flex-column align-items-end'>
-            <h6><GoArrowDownRight/> 32%</h6> 
-            <p className='mb-0 desc'>Compared To April 2022</p>
-          </div>
-        </div>
-        <div className='d-flex justify-content-between align-items-end flex-grow-1 bg-white p-3 rounded-3'>
-          <div>
-            <p className='desc'>Total</p>
-            <h4 className='mb-0 sub-title'>$300</h4>
-          </div>
-          <div className='d-flex flex-column align-items-end'>
-            <h6 className='red'><GoArrowDownRight/> 32%</h6>
-            <p className='mb-0 desc'>Compared To April 2022</p>
-          </div>
-        </div>
-        <div className='d-flex justify-content-between align-items-end flex-grow-1 bg-white p-3 rounded-3'>
-          <div>
-            <p className='desc'>Total</p>
-            <h4 className='mb-0 sub-title'>$300</h4>
-          </div>
-          <div className='d-flex flex-column align-items-end'>
-            <h6 className='green'><GoArrowDownRight/> 32%</h6>
-            <p className='mb-0 desc'>Compared To April 2022</p>
-          </div>
+      <div className='mt-4'>
+        <div>
+          <HighchartsReact highcharts={Highcharts} options={splineChartOptions} />
         </div>
       </div>
       <div className='mt-4'>
-        <h3 className='mb-5 title'>Income Statistics</h3>
         <div>
-          <Column {...config} />
-        </div>
-      </div>
-      <div className='mt-4'>
-        <h3 className='mb-5 title'>Recent Orders</h3>
-        <div>
-          <Table 
-            columns={columns} 
-            dataSource={formattedData}
-          />
+          <RecentOrders />
         </div>
       </div>
     </div>

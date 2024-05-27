@@ -89,11 +89,7 @@ const MainLayout = () => {
               label: 'Orders',
             }
             ,
-            {
-              key: 'admincreate',
-              icon: <FaClipboardCheck />,
-              label: 'Admin Create Product',
-            }
+            
           ]}
         />
       </Sider>

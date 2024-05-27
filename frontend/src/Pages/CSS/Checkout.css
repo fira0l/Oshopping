@@ -1,6 +1,6 @@
 /* Checkout page container */
 .checkout {
-  margin: 100px 140px;
+  margin: 100px 60px;
 }
 
 .error {
@@ -18,24 +18,6 @@
   color: #555;
 }
 
-/* Returning customer section */
-.return-check {
-  width: 100%;
-  margin-bottom: 40px;
-  border-bottom: 1px solid #ddd;
-  padding-bottom: 20px;
-}
-
-.return-check h1 {
-  font-size: 18px;
-  margin-bottom: 10px;
-}
-
-.return-check a {
-  color: rgb(91, 179, 234);
-  text-decoration: none;
-  cursor: pointer;
-}
 
 /* Input box styles */
 .inputBox {
@@ -44,9 +26,6 @@
   margin-bottom: 0px;
 }
 
-.return-check .inputBox h1 {
-  font-size: 16px;
-}
 
 .inputBox input {
   width: 350px;
@@ -56,38 +35,11 @@
   margin-right: 10px;
 }
 
-.return-check p {
-  margin: 30px 0px;
-  font-size: 16px;
-}
 
 .inputBox .pass {
   margin-left: 10px;
 }
 
-/* Button styles */
-.return-check .btn {
-  background: rgb(91, 179, 234);
-  padding: 10px 20px;
-  color: white;
-  font-weight: 500;
-  font-size: 16px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  margin: 20px 0px;
-}
-
-.return-check .btn:hover {
-  background: rgb(80, 160, 210);
-}
-
-.return-check .links {
-  color: rgb(91, 179, 234);
-  text-decoration: underline;
-  font-size: 14px;
-  cursor: pointer;
-}
 
 /* Layout for billing and order summary sections */
 .lefty {
@@ -180,6 +132,7 @@
   background: rgb(80, 160, 210);
 }
 
+
 /* Responsive design for smaller screens */
 @media (max-width: 1330px) {
   .checkout {
@@ -190,20 +143,24 @@
     width: 108%;
   }
 }
+
 @media (max-width: 1250px) {
   .checkout {
-    margin: 100px;
-
+    margin: 100px 40px;
+  }
+  .lefty {
+    gap: 20px;
   }
   .checkout-right {
     width: 68%;
     margin-left: 100px;
   }
+
 }
 
 @media (max-width: 850px) {
   .checkout {
-    margin: 100px 140px;
+    margin: 100px 40px;
   }
 
   .inputBox {
@@ -229,5 +186,16 @@
   .checkout-right {
     width: 100%;
     margin-left: 0;
+  }
+
+  /* Adjustments for table */
+  .order-history-table table {
+    overflow-x: auto;
+    display: block;
+  }
+  .order-history-table th,
+  .order-history-table td {
+    min-width: 40px; /* Adjust as needed */
+    white-space: nowrap;
   }
 }

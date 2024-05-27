@@ -8,6 +8,7 @@ const ProductDisplay = () => {
   const { allProducts, allCategories, addToCart } = useContext(ShopContext);
   const { productId } = useParams();
   const [quantity, setQuantity] = useState(1);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const product = allProducts.find((e) => e.product_id === productId);
 
@@ -28,25 +29,17 @@ const ProductDisplay = () => {
   };
 
   const handleAddToCart = () => {
-    console.log('Add to Cart button clicked');
-    
-    if (product.stock_quantity === 0) {
-      alert('Sorry, this product is out of stock.');
-      return;
-    }
-  
     if (quantity > product.stock_quantity) {
-      alert(`Only ${product.stock_quantity} item(s) available in stock.`);
+      setErrorMessage(`Only ${product.stock_quantity} item(s) available in stock.`);
       return;
     }
-  
+
     for (let i = 0; i < quantity; i++) {
       addToCart(product.product_id, 1);
     }
-  
-    setQuantity(1); // Reset quantity after adding to cart
+
+    setQuantity(1);
   };
-  
 
   return (
     <div className='productdisplay'>
@@ -82,6 +75,7 @@ const ProductDisplay = () => {
           />
         </div>
         <button onClick={handleAddToCart} disabled={product.stock_quantity === 0}>Add To Cart</button> {/* Disable button if out of stock */}
+        {errorMessage && <p className="error-message">{errorMessage}</p>}
         <p className="productdisplay-right-category"><span>Category :</span> {categoryName}</p>
       </div>
     </div>

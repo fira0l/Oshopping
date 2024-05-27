@@ -29,7 +29,7 @@ const productTypeDefs = gql`
     ): Product
     deleteProduct(product_id: ID!): Product
     decreaseStockQuantity(product_id: ID!, quantity: Int!): Product
-
+    updateStockQuantity(product_id: ID!, stock_quantity: Int!): Product  
   }
 `;
 

@@ -53,32 +53,34 @@ const productResolvers = {
     },
     decreaseStockQuantity: async (_, { product_id, quantity }) => {
       try {
-        // Fetch the current stock quantity of the product
         const currentProduct = await db.one('SELECT * FROM products WHERE product_id = $1', [product_id]);
-
-        // Ensure the product exists
         if (!currentProduct) {
           throw new Error('Product not found');
         }
-
-        // Calculate the new stock quantity after decreasing
         const newStockQuantity = currentProduct.stock_quantity - quantity;
-
-        // Ensure the stock quantity does not go below zero
         if (newStockQuantity < 0) {
           throw new Error('Stock quantity cannot be negative');
         }
-
-        // Update the product's stock quantity in the database
         await db.none('UPDATE products SET stock_quantity = $1 WHERE product_id = $2', [newStockQuantity, product_id]);
-
-        // Return the updated product
         return {
           ...currentProduct,
           stock_quantity: newStockQuantity
         };
       } catch (error) {
         console.error('Error decreasing stock quantity:', error);
+        throw error;
+      }
+    },
+    updateStockQuantity: async (_, { product_id, stock_quantity }) => {  
+      try {
+        const product = await db.oneOrNone('SELECT * FROM products WHERE product_id = $1', [product_id]);
+        if (!product) throw new Error('Product not found');
+
+        await db.none('UPDATE products SET stock_quantity = $1 WHERE product_id = $2', [stock_quantity, product_id]);
+
+        return { ...product, stock_quantity };
+      } catch (error) {
+        console.error('Error updating stock quantity:', error);
         throw error;
       }
     },

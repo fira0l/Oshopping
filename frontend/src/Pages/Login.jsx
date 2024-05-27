@@ -59,7 +59,7 @@ const Login = () => {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
             />
-            <span>Username or Email <FaUser/></span>
+            <span>Username<FaUser/></span>
             <i className='bx bxs-user'></i>
           </div>
 
@@ -75,10 +75,6 @@ const Login = () => {
           </div>
 
           <div className="remember-forgot">
-            <div className="remember-me">
-              <input type="checkbox" id="remember-me" />
-              <label htmlFor="remember-me">Remember Me</label>
-            </div>
             <div className="forgot-password">
               <Link to="/forgot">Forgot Password</Link>
             </div>
