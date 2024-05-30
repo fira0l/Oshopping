@@ -81,7 +81,7 @@ const userResolvers = {
       try {
         const currentTimeInSeconds = Date.now() / 1000;
 
-        const userSession = await db.oneOrNone(
+        const userSession = await db.manyOrNone(
           'SELECT * FROM user_sessions WHERE session_token = $1 OR expiration_time > to_timestamp($2)',
           [token, currentTimeInSeconds]
         );
