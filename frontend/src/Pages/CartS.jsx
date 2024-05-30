@@ -9,12 +9,9 @@ const CartS = () => {
   const navigate = useNavigate();
 
   const handleCheckout = () => {
-    // Check if user is logged in
     if (!user) {
-      // Redirect to login page if not logged in
       navigate('/login');
     } else {
-      // Proceed to checkout
       navigate('/checkout');
     }
   };

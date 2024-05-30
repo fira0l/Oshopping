@@ -54,7 +54,22 @@ const Customers = () => {
     {
       title: 'Registration Date',
       dataIndex: 'registration_date',
+      render: (registrationDate) => {
+        // Log the raw registration date for debugging
+        console.log('Raw registration date:', registrationDate);
+
+        // Convert and format the registration date
+        const formattedDate = moment(Number(registrationDate)).isValid()
+          ? moment(Number(registrationDate)).format('YYYY-MM-DD')
+          : 'Invalid Date';
+
+        // Log the formatted date for debugging
+        console.log('Formatted registration date:', formattedDate);
+
+        return formattedDate;
+      },
     },
+
   ];
 
   if (loading) return <p>Loading...</p>;

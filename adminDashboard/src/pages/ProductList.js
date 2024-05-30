@@ -57,8 +57,9 @@ const ProductList = () => {
 
   const handleUpdateStockQuantity = async (productId, stockQuantity) => {
     try {
+      // eslint-disable-next-line no-unused-vars
       const { data } = await updateStockQuantityMutation({
-        variables: { product_id: productId, stock_quantity: stockQuantity + 1 } // Increment stock quantity by 1
+        variables: { product_id: productId, stock_quantity: stockQuantity + 1 } 
       });
       message.success('Stock quantity updated successfully');
       refetchProducts(); // Refetch products after updating stock

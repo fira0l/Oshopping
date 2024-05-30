@@ -8,7 +8,7 @@ body {
 
 .form_container {
   position: relative;
-  max-width: 500px; /* Adjust for better responsiveness */
+  max-width: 500px; 
   width: 90%;
   margin: 40px auto;
   padding: 20px;

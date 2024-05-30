@@ -23,6 +23,7 @@ const Forgotpassword = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      // eslint-disable-next-line no-unused-vars
       const { data } = await changePasswordAdmin({ variables: { email } });
       setMessage('Password reset link sent to your email');
       setError('');

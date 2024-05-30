@@ -35,7 +35,7 @@ const UPDATE_ORDER_STATUS_MUTATION = gql`
 `;
 
 const Orders = () => {
-  const { loading, error, data, refetch } = useQuery(GET_ORDERS_QUERY);
+  const { loading, error, data } = useQuery(GET_ORDERS_QUERY);
   const [updateOrderStatus] = useMutation(UPDATE_ORDER_STATUS_MUTATION);
   const [orderStatus, setOrderStatus] = useState({});
 

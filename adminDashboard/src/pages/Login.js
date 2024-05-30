@@ -87,7 +87,6 @@ const Login = () => {
               disabled={loading}
               style={{ marginTop: '10px' }}
             > Login
-              {/* {loading ? 'Logging in...' : 'Login'} */}
             </button>
           </form>
         </div>

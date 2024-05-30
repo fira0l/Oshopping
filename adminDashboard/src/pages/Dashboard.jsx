@@ -3,7 +3,6 @@ import { useQuery, gql } from '@apollo/client';
 import moment from 'moment';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
-// import RecentOrders from './RecentOrders';
 
 const GET_ORDERS_QUERY = gql`
   query GetOrders {
