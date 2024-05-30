@@ -78,8 +78,8 @@ const Orders = () => {
 
   const columns = [
     {
-      title: 'SNo',
-      dataIndex: 'key',
+      title: 'Order_Id',
+      dataIndex: 'order_new_id',
     },
     {
       title: 'Email',
