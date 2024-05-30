@@ -1,5 +1,5 @@
-import React from 'react';
-import { Table, Button, message } from 'antd';
+import React, { useState } from 'react';
+import { Table, Button, message, Popconfirm } from 'antd';
 import { useQuery, useMutation, gql } from '@apollo/client';
 
 const GET_PRODUCTS = gql`
@@ -35,10 +35,20 @@ const UPDATE_STOCK_QUANTITY = gql`
   }
 `;
 
+const DELETE_PRODUCT = gql`
+  mutation DeleteProduct($product_id: ID!) {
+    deleteProduct(product_id: $product_id) {
+      product_id
+    }
+  }
+`;
+
 const ProductList = () => {
+  const [currentPage, setCurrentPage] = useState(1);
   const { loading: productsLoading, error: productsError, data, refetch: refetchProducts } = useQuery(GET_PRODUCTS);
   const { loading: categoriesLoading, error: categoriesError, data: categoriesData } = useQuery(GET_CATEGORIES);
   const [updateStockQuantityMutation] = useMutation(UPDATE_STOCK_QUANTITY);
+  const [deleteProductMutation] = useMutation(DELETE_PRODUCT);
 
   const getCategoryNameById = (categoryId) => {
     const category = categoriesData?.getAllCategories.find((cat) => cat.category_id === categoryId);
@@ -58,11 +68,25 @@ const ProductList = () => {
     }
   };
 
+  const handleDeleteProduct = async (productId) => {
+    try {
+      await deleteProductMutation({
+        variables: { product_id: productId }
+      });
+      message.success('Product deleted successfully');
+      refetchProducts(); // Refetch products after deleting
+    } catch (error) {
+      console.error('Error deleting product:', error.message);
+      message.error('Failed to delete product');
+    }
+  };
+
   const columns = [
     {
       title: 'SNo',
+      dataIndex: 'sno',
       key: 'sno',
-      render: (text, record, index) => index + 1,
+      render: (text, record, index) => index + 1 + (currentPage - 1) * 10,
     },
     {
       title: 'Image',
@@ -82,11 +106,6 @@ const ProductList = () => {
       render: (category_id) => getCategoryNameById(category_id),
     },
     {
-      title: 'Description',
-      dataIndex: 'description',
-      key: 'description',
-    },
-    {
       title: 'Price',
       dataIndex: 'price',
       key: 'price',
@@ -100,7 +119,17 @@ const ProductList = () => {
       title: 'Action',
       key: 'action',
       render: (text, record) => (
-        <Button type="primary" onClick={() => handleUpdateStockQuantity(record.product_id, record.stock_quantity)}>Edit Stock 1</Button>
+        <>
+          <Button type="primary" onClick={() => handleUpdateStockQuantity(record.product_id, record.stock_quantity)}>Edit Stock 1</Button>
+          <Popconfirm
+            title="Are you sure you want to delete this product?"
+            onConfirm={() => handleDeleteProduct(record.product_id)}
+            okText="Yes"
+            cancelText="No"
+          >
+            <Button type="danger" style={{ marginLeft: 10, color: 'red' }}>Delete</Button>
+          </Popconfirm>
+        </>
       ),
     },
   ];
@@ -108,14 +137,21 @@ const ProductList = () => {
   if (productsLoading || categoriesLoading) return <p>Loading...</p>;
   if (productsError || categoriesError) return <p>Error: {productsError || categoriesError}</p>;
 
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  const productsWithSNo = data.products.map((product, index) => ({ ...product, sno: index }));
+
   return (
     <div>
       <h3 className='mb-4 title'>Products</h3>
       <div>
-        <Table 
-          columns={columns} 
-          dataSource={data.products} 
-          rowKey="product_id" // Provide a unique key for each row
+        <Table
+          columns={columns}
+          dataSource={productsWithSNo}
+          rowKey="product_id"
+          pagination={{ onChange: handlePageChange }}
         />
       </div>
     </div>

@@ -1,6 +1,6 @@
-import React from 'react';
-import { useQuery,  gql } from '@apollo/client';
-import { Table, Tag } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { useQuery, useMutation, gql } from '@apollo/client';
+import { Table, Select } from 'antd';
 import moment from 'moment';
 
 const GET_ORDERS_QUERY = gql`
@@ -25,82 +25,56 @@ const GET_ORDERS_QUERY = gql`
   }
 `;
 
+const UPDATE_ORDER_STATUS_MUTATION = gql`
+  mutation UpdateOrderStatus($order_new_id: ID!, $status: String!) {
+    updateOrderStatus(order_new_id: $order_new_id, status: $status) {
+      order_new_id
+      status
+    }
+  }
+`;
 
 const Orders = () => {
-  const { loading, error, data } = useQuery(GET_ORDERS_QUERY);
+  const { loading, error, data, refetch } = useQuery(GET_ORDERS_QUERY);
+  const [updateOrderStatus] = useMutation(UPDATE_ORDER_STATUS_MUTATION);
+  const [orderStatus, setOrderStatus] = useState({});
+
+  useEffect(() => {
+    if (!loading && data) {
+      const initialStatus = data.orderNews.reduce((acc, order) => {
+        acc[order.order_new_id] = order.status;
+        return acc;
+      }, {});
+      setOrderStatus(initialStatus);
+    }
+  }, [loading, data]);
+
+  const handleStatusChange = (value, orderId) => {
+    updateOrderStatus({ variables: { order_new_id: orderId, status: value } });
+    setOrderStatus({ ...orderStatus, [orderId]: value });
+  };
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
-  const statusTimeline = [
-    { status: 'Processing', daysOffset: 0 },
-    { status: 'Shipped', daysOffset: 1 },
-    { status: 'Out for Delivery', daysOffset: 2 },
-    { status: 'Delivered', daysOffset: 3 },
-  ];
-
-  const getCurrentStatus = (orderDate) => {
-    const today = moment();
-    for (let i = statusTimeline.length - 1; i >= 0; i--) {
-      const statusDate = moment(orderDate).add(statusTimeline[i].daysOffset, 'days');
-      if (today.isSameOrAfter(statusDate, 'day')) {
-        return statusTimeline[i].status;
-      }
-    }
-    return 'Processing';
-  };
-
-
-  // Group orders by order_new_id
-  const groupedOrders = data.orderNews.reduce((acc, order) => {
-    const orderId = order.order_new_id;
-    if (!acc[orderId]) {
-      acc[orderId] = {
-        order_new_id: orderId,
-        email: order.user.email,
-        status: getCurrentStatus(order.order_date),
-        products: [],
-        totalAmount: 0,
-        totalQuantity: 0,
-        order_date: order.order_date,
-        shipping_address: order.shipping_address,
-        shipping_city: order.shipping_city,
-        statusHistory: statusTimeline.map(({ status, daysOffset }) => ({
-          status,
-          date: moment(order.order_date).add(daysOffset, 'days').format('YYYY-MM-DD'),
-        })),
-      };
-    }
-    acc[orderId].products.push(order);
-    acc[orderId].totalAmount += order.total_amount;
-    acc[orderId].totalQuantity += order.quantity;
-    return acc;
-  }, {});
-
-  let formattedData = Object.keys(groupedOrders).map((key) => {
-    const order = groupedOrders[key];
-    return {
-      order_new_id: order.order_new_id,
-      email: order.email,
-      status: order.status,
-      products: order.products,
-      totalAmount: order.totalAmount,
-      totalQuantity: order.totalQuantity,
-      order_date: order.order_date,
-      shipping_address: order.shipping_address,
-      shipping_city: order.shipping_city,
-      statusHistory: order.statusHistory,
-    };
-  });
-
-  // Sort the data from most recent to oldest
-  formattedData.sort((a, b) => moment(b.order_date).diff(moment(a.order_date)));
-
-  // Reassign the key to be sequential numbers after sorting
-  formattedData = formattedData.map((order, index) => ({
-    key: index + 1, // Sequential numbers starting from 1
-    ...order,
+  const formattedData = data.orderNews.map((order, index) => ({
+    key: index + 1,
+    order_new_id: order.order_new_id,
+    email: order.user.email,
+    products: [{
+      ...order.product,
+      quantity: order.quantity,
+    }],
+    totalAmount: order.total_amount,
+    totalQuantity: order.quantity,
+    order_date: order.order_date,
+    shipping_address: order.shipping_address,
+    shipping_city: order.shipping_city,
   }));
+
+  // Sort the formattedData array by order date, from most recent to past
+  formattedData.sort((a, b) => moment(b.order_date).diff(moment(a.order_date)));
+  
 
   const columns = [
     {
@@ -112,38 +86,20 @@ const Orders = () => {
       dataIndex: 'email',
     },
     {
-      title: 'Status',
-      dataIndex: 'status',
-      render: (status) => {
-        let color;
-        switch (status) {
-          case 'Processing':
-            color = 'blue';
-            break;
-          case 'Shipped':
-            color = 'orange';
-            break;
-          case 'Out for Delivery':
-            color = 'volcano';
-            break;
-          case 'Delivered':
-            color = 'green';
-            break;
-          default:
-            color = 'geekblue';
-        }
-        return <Tag color={color}>{status}</Tag>;
-      },
-    },
-    {
       title: 'Products',
       dataIndex: 'products',
       render: (products) => (
         <div>
           {products.map((order, index) => (
             <div key={index} style={{ marginBottom: '8px' }}>
-              <img src={order.product.image} alt="Product" style={{ width: 50, height: 50, marginRight: '8px' }} />
-              <span>{order.product.name}</span>
+              {order.product && order.product.image && ( // Add conditional check
+                <img 
+                  src={order.product.image} 
+                  alt="Product" 
+                  style={{ width: 50, height: 50, marginRight: '8px' }} 
+                />
+              )}
+              <span>{order.product && order.product.name}</span> {/* Add conditional check */}
               <span style={{ marginLeft: '8px' }}>x{order.quantity}</span>
             </div>
           ))}
@@ -171,40 +127,28 @@ const Orders = () => {
       title: 'shipping_city',
       dataIndex: 'shipping_city',
     },
-    // {
-    //   title: 'Actions',
-    //   render: (text, record) => (
-    //     <Button
-    //       type="primary"
-    //       danger
-    //       onClick={() => handleDelete(record.order_new_id)}
-    //     >
-    //       Delete
-    //     </Button>
-    //   ),
-    // },
+    {
+      title: 'Status',
+      dataIndex: 'order_new_id',
+      render: (order_new_id) => (
+        <Select
+          value={orderStatus[order_new_id] || 'Select'}
+          style={{ width: 120 }}
+          onChange={(value) => handleStatusChange(value, order_new_id)}
+        >
+          <Select.Option value="Processing">Processing</Select.Option>
+          <Select.Option value="Shipped">Shipped</Select.Option>
+          <Select.Option value="Delivered">Delivered</Select.Option>
+        </Select>
+      ),
+    },
   ];
-
-  const expandedRowRender = (record) => (
-    <div>
-      <h4>Status History</h4>
-      <ul>
-        {record.statusHistory.map((status, index) => (
-          <li key={index}>{status.status} - {status.date}</li>
-        ))}
-      </ul>
-    </div>
-  );
 
   return (
     <div>
       <h3 className='mb-4 title'>Orders</h3>
       <div>
-        <Table
-          columns={columns}
-          dataSource={formattedData}
-          expandable={{ expandedRowRender }}
-        />
+        <Table columns={columns} dataSource={formattedData} />
       </div>
     </div>
   );

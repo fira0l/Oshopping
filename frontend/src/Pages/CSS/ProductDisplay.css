@@ -5,18 +5,22 @@
 }
 
 .productdisplay-left {
+  margin-left: 50px;
   gap: 17px;
 }
 
 .productdisplay-main-img {
+  width: 70%;
+  height: 70%;
   box-sizing: border-box;
   margin-top: 100px;
-  margin-left: 10px;
+  margin-left: 10x;
   margin-bottom: 20px;
 }
 
 .productdisplay-right {
-  margin: 0px 110px;
+  margin: 0px 120px;
+  margin-left: -60px;
   display: flex;
   flex-direction: column;
 }
@@ -92,7 +96,7 @@
   margin-top: 50px;
   margin-bottom: 1rem;
   display: flex;
-  align-items: center; /* Vertically align the label and input */
+  align-items: center; 
 }
 
 .productdisplay-right-quantity label {
@@ -130,7 +134,7 @@
   }
 
   .breadcrum {
-    grid-column: 1 / -1; /* Span the full width */
+    grid-column: 1 / -1; 
   }
 
   .productdisplay-left,
@@ -140,7 +144,6 @@
     margin-left: 20px;
   }
 
-  /* Adjust the main image */
   .productdisplay-main-img {
     width: calc(100% - 50px);
     height: calc(100% - 80px);
@@ -151,7 +154,6 @@
     padding-bottom: 0px;
   }
 
-  /* Other adjustments for text content */
   .productdisplay-right h1 {
     font-size: 25px;
   }

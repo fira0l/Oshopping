@@ -1,81 +1,117 @@
-import React, { useState, useContext } from 'react';
-import './CSS/Signup.css';
-import login_image from '../components/Assets/background/login-page-2.jpg';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
 import { gql, useMutation } from '@apollo/client';
-import { ShopContext } from '../Context/ShopContext';
+import { Link } from 'react-router-dom';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import './CSS/Signup.css';
 
 const REGISTER_USER = gql`
   mutation RegisterUser(
     $username: String!,
-    $password_hash: String!,
+    $password: String!,
     $email: String!,
-    $first_name: String!,
-    $last_name: String!,
+    $firstName: String!,
+    $lastName: String!,
     $address: String!,
-    $phone_number: String!
+    $phoneNumber: String!
   ) {
     registerUser(
       username: $username,
-      password_hash: $password_hash,
+      password_hash: $password,
       email: $email,
-      first_name: $first_name,
-      last_name: $last_name,
+      first_name: $firstName,
+      last_name: $lastName,
       address: $address,
-      phone_number: $phone_number
+      phone_number: $phoneNumber
     ) {
       user_id
-      username
-      email
       first_name
-      last_name
-      address
-      phone_number
     }
   }
 `;
 
 const SignUp = () => {
-  const { setUser } = useContext(ShopContext);
-  const navigate = useNavigate();
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [email, setEmail] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [address, setAddress] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [passwordsMatch, setPasswordsMatch] = useState(true);
-
-  const [registerUser, { loading, error }] = useMutation(REGISTER_USER, {
-    onCompleted: (data) => {
-      setUser(data.registerUser);
-      navigate('/checkout');
-    }
+  const [formData, setFormData] = useState({
+    username: '',
+    password: '',
+    confirmPassword: '',
+    email: '',
+    firstName: '',
+    lastName: '',
+    address: '',
+    phoneNumber: '',
   });
+  const [passwordsMatch, setPasswordsMatch] = useState(true);
+  const [passwordStrength, setPasswordStrength] = useState(0);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const handleSubmit = (e) => {
+  const [registerUser, { data, loading, error }] = useMutation(REGISTER_USER);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+
+    if (name === 'password') {
+      evaluatePasswordStrength(value);
+    }
+  };
+
+  const evaluatePasswordStrength = (password) => {
+    let strength = 0;
+    if (password.length >= 6) strength += 1;
+    if (/[a-zA-Z]/.test(password)) strength += 1;
+    if (/[0-9]/.test(password)) strength += 1;
+    if (/[!@#$%^&*]/.test(password)) strength += 1;
+    setPasswordStrength(strength);
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    const { username, password, confirmPassword, email, firstName, lastName, address, phoneNumber } = formData;
+
     if (password === confirmPassword) {
-      registerUser({ 
-        variables: { 
-          username,
-          password_hash: password,
-          email,
-          first_name: firstName,
-          last_name: lastName,
-          address,
-          phone_number: phoneNumber
-        } 
-      });
+      setPasswordsMatch(true);
+      try {
+        await registerUser({
+          variables: {
+            username,
+            password,
+            email,
+            firstName,
+            lastName,
+            address,
+            phoneNumber
+          }
+        });
+      } catch (err) {
+        console.error('Registration error:', err);
+      }
     } else {
       setPasswordsMatch(false);
     }
   };
 
+  const getPasswordStrengthColor = (strength) => {
+    switch (strength) {
+      case 0: return 'gray';
+      case 1: return 'red';
+      case 2: return 'orange';
+      case 3: return 'yellow';
+      case 4: return 'green';
+      default: return 'gray';
+    }
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword(!showConfirmPassword);
+  };
+
   return (
-    <div className='body' style={{backgroundImage: `url(${login_image})`}}>
+    <div className='body'>
       <div className="form_container active">
         <div className="signup_form">
           <form onSubmit={handleSubmit}>
@@ -86,45 +122,83 @@ const SignUp = () => {
                 <div className="input_box">
                   <input 
                     type="text" 
+                    name="username"
                     placeholder="Username" 
-                    value={username} 
-                    onChange={e => setUsername(e.target.value)} 
+                    value={formData.username} 
+                    onChange={handleChange} 
                     required 
                   />
-                  <i className="fa-regular fa-envelope"></i>
+                  <i className="fa-solid fa-user"></i>
                 </div>
 
                 <div className="input_box">
                   <input 
                     type="email" 
+                    name="email"
                     placeholder="Enter your email" 
-                    value={email} 
-                    onChange={e => setEmail(e.target.value)} 
+                    value={formData.email} 
+                    onChange={handleChange} 
                     required 
                   />
                   <i className="fa-regular fa-envelope"></i>
                 </div>
-
                 <div className="input_box">
                   <input 
-                    type="password" 
+                    type={showPassword ? "text" : "password"}
+                    name="password"
                     placeholder="Create your password" 
-                    value={password} 
-                    onChange={e => setPassword(e.target.value)} 
+                    value={formData.password} 
+                    onChange={(event) => {
+                      const {  value } = event.target;
+                      const passwordPattern = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*]).{6,}$/;
+                      if (passwordPattern.test(value)) {
+                        document.getElementById('passwordMessage').textContent = '';
+                        handleChange(event);
+                      } else {
+                        document.getElementById('passwordMessage').textContent = 'Password must be at least 6 characters long and contain at least one letter, one number, and one special character.';
+                      }
+                      handleChange(event);
+                    }} 
                     required 
+                    onFocus={() => {
+                      document.getElementById('passwordTooltip').style.display = 'block';
+                    }}
+                    onBlur={() => {
+                      document.getElementById('passwordTooltip').style.display = 'none';
+                    }}
                   />
-                  <i className="fa-solid fa-lock"></i>
+                  <span
+                      className={`toggle-password`}
+                      onClick={togglePasswordVisibility}
+                    >
+                      {showPassword ? <FaEyeSlash /> : <FaEye />}
+                    </span>
+                  <div id="passwordTooltip" style={{ display: 'none', position: 'absolute', backgroundColor: '#f9f9f9', border: '1px solid #ccc', padding: '5px', zIndex: '1' }}>
+                    Password must be at least 6 characters long and contain at least one letter, one number, and one special character.
+                  </div>
+                  <span id="passwordMessage"></span>
                 </div>
 
                 <div className="input_box">
                   <input 
-                    type="password" 
+                    type={showConfirmPassword ? "text" : "password"}
+                    name="confirmPassword"
                     placeholder="Confirm your password" 
-                    value={confirmPassword} 
-                    onChange={e => setConfirmPassword(e.target.value)} 
+                    value={formData.confirmPassword} 
+                    onChange={(event) => {
+                      const {  value } = event.target;
+                      handleChange(event);
+                      document.getElementById('confirmPasswordMessage').textContent = formData.password !== value ? 'Passwords do not match.' : '';
+                    }} 
                     required 
                   />
-                  <i className="fa-solid fa-lock"></i>
+                  <span
+                    className={`toggle-password`}
+                    onClick={toggleConfirmPasswordVisibility}
+                  >
+                    {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+                  </span>
+                  <span id="confirmPasswordMessage"></span>
                 </div>
               </div>
 
@@ -132,57 +206,87 @@ const SignUp = () => {
                 <div className="input_box">
                   <input 
                     type="text" 
+                    name="firstName"
                     placeholder="Enter your first name" 
-                    value={firstName} 
-                    onChange={e => setFirstName(e.target.value)} 
+                    value={formData.firstName} 
+                    onChange={handleChange} 
                     required 
                   />
-                  <i className="fa-solid fa-lock"></i>
+                  <i className="fa-solid fa-user"></i>
                 </div>
 
                 <div className="input_box">
                   <input 
                     type="text" 
+                    name="lastName"
                     placeholder="Enter your last name" 
-                    value={lastName} 
-                    onChange={e => setLastName(e.target.value)} 
-                    required 
+                    value={formData.lastName} 
+                    onChange={handleChange} 
+                    required
                   />
-                  <i className="fa-solid fa-lock"></i>
+                  <i className="fa-solid fa-user"></i>
                 </div>
 
                 <div className="input_box">
                   <input 
                     type="text" 
-                    placeholder="Enter your billing address" 
-                    value={address} 
-                    onChange={e => setAddress(e.target.value)} 
-                    required 
+                    name="address"
+                    placeholder="Enter your address" 
+                    value={formData.address} 
+                    onChange={handleChange} 
+                    required
                   />
-                  <i className="fa-solid fa-lock"></i>
+                  <i className="fa-solid fa-location-dot"></i>
                 </div>
-
                 <div className="input_box">
                   <input 
                     type="text" 
+                    name="phoneNumber"
                     placeholder="Enter your phone number" 
-                    value={phoneNumber} 
-                    onChange={e => setPhoneNumber(e.target.value)} 
-                    required 
+                    value={formData.phoneNumber} 
+                    onChange={(event) => {
+                      const {  value } = event.target;
+                      const phonePattern = /^\+?[0-9]*$/;
+                      if (phonePattern.test(value)) {
+                        handleChange(event);
+                      }
+                    }} 
+                    required
                   />
-                  <i className="fa-solid fa-lock"></i>
+                  <i className="fa-solid fa-phone"></i>
                 </div>
               </div>
             </div>
 
             {!passwordsMatch && <div style={{ color: 'red' }}>Passwords do not match.</div>}
 
-            <button type="submit" disabled={loading}>Signup</button>
+            <button type="submit">Signup</button>
 
             <div className="signup">
               Already have an account? <Link to="/login">Login</Link>
             </div>
-            {error && <p style={{ color: 'red' }}>Submission error! {error.message}</p>}
+
+            {data && <p>User registered successfully: {data.registerUser.first_name}</p>}
+            {error && <div style={{ color: 'red' }}>Error: {error.message}</div>}
+            {loading && <p>Submitting...</p>}
+
+            <div>
+              <label>Password Strength:</label>
+              <input
+                type="range"
+                min="0"
+                max="4"
+                value={passwordStrength}
+                readOnly
+                style={{ color: getPasswordStrengthColor(passwordStrength)}}
+              />
+              <span style={{ color: getPasswordStrengthColor(passwordStrength) }}>
+                {passwordStrength === 1 && 'Weak'}
+                {passwordStrength === 2 && 'Fair'}
+                {passwordStrength === 3 && 'Good'}
+                {passwordStrength === 4 && 'Strong'}
+              </span>
+            </div>
           </form>
         </div>
       </div>

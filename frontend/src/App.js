@@ -11,6 +11,8 @@ import Footer from './components/Footer/Footer';
 import SignupPage from './Pages/SignupPage';
 import Checkout from './Pages/Checkout';
 import ForgotP from './Pages/ForgotP';
+import OrderHistory from './Pages/OrderHistory';
+import ResetPassword from './Pages/ResetPassword';
 
 
 function App() {
@@ -20,10 +22,10 @@ function App() {
        <Navbar/>
        <Routes>
           <Route path='/' element={<Home/>}/>
-          <Route path='/men' element={<ShopCategory category="1" />} />
-          <Route path='/women' element={<ShopCategory category="2" />} />
-          <Route path='/kids' element={<ShopCategory category="3" />} />
-          <Route path='/house' element={<ShopCategory category="4" />} />
+          <Route path='/men' element={<ShopCategory category="55" />} />
+          <Route path='/women' element={<ShopCategory category="56" />} />
+          <Route path='/kids' element={<ShopCategory category="57" />} />
+          <Route path='/house' element={<ShopCategory category="58" />} />
           <Route path='/product/:productId' element={<ProductDisplay />} />
           <Route path='/contactus' element={<ContactUs/>}/>
           <Route path='/login' element={<Login/>}/>
@@ -31,6 +33,10 @@ function App() {
           <Route path='/checkout' element={<Checkout/>}/>
           <Route path='/signup' element={<SignupPage/>}/>
           <Route path='/forgot' element={<ForgotP/>}/>
+          <Route path='/order-history' element={<OrderHistory/>}/>
+          <Route path='/reset-password/:token' element={<ResetPassword/>}/>
+
+
           
         </Routes>  
         <Footer/>

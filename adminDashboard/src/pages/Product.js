@@ -112,12 +112,40 @@ const Product = () => {
           </div>
           <div className="mb-3">
             <label htmlFor="productPrice" className="form-label">Product Price:</label>
-            <input type="number" className="form-control" id="productPrice" value={price} onChange={e => setPrice(e.target.value)} step="0.01" required />
+            <input 
+              type="number" 
+              className="form-control" 
+              id="productPrice" 
+              value={price} 
+              onChange={e => {
+                const newValue = e.target.value;
+                // Check if the new value is valid (greater than 0)
+                if (newValue > 0 || newValue === '') {
+                  setPrice(newValue);
+                }
+              }} 
+              step="0.01" 
+              required 
+            />
           </div>
           <div className="mb-3">
             <label htmlFor="productQuantity" className="form-label">Product Quantity:</label>
-            <input type="number" className="form-control" id="productQuantity" value={stockQuantity} onChange={e => setStockQuantity(e.target.value)} required />
+            <input 
+              type="number" 
+              className="form-control" 
+              id="productQuantity" 
+              value={stockQuantity} 
+              onChange={e => {
+                const newValue = e.target.value;
+                // Check if the new value is valid (greater than 0)
+                if (newValue > 0 || newValue === '') {
+                  setStockQuantity(newValue);
+                }
+              }} 
+              required 
+            />
           </div>
+
           <div className="mb-3">
             <label htmlFor="categoryId" className="form-label">Category:</label>
             <Select value={categoryId} onChange={value => setCategoryId(value)} style={{ width: '100%' }} loading={categoriesLoading}>

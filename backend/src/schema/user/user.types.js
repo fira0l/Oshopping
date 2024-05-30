@@ -20,8 +20,18 @@ const userTypeDefs = gql`
 
   extend type Mutation {
     registerUser(username: String!, password_hash: String!, email: String!, first_name: String!, last_name: String!, address: String!, phone_number: String!): User
-    login(username: String!, password: String!): User
-    changePassword(user_id: ID!, new_password: String!): User
+    login(username: String!, password: String!): AuthPayload
+    changePassword(email: String!): User
+    resetPassword(token: String!, password: String!): ResetPasswordResponse
+  }
+
+  type ResetPasswordResponse {
+    message: String
+  }
+
+  type AuthPayload {
+    token: String!
+    user: User!
   }
 `;
 

@@ -6,7 +6,7 @@ const orderTypeDefs = gql`
     user_id: ID!
     product_id: ID!
     order_date: String!
-    status: String!
+    status: String
     total_amount: Float!
     shipping_address: String!
     shipping_city: String!
@@ -28,7 +28,6 @@ const orderTypeDefs = gql`
     orderProduct(
       user_id: ID!,
       product_id: ID!,
-      status: String!,
       total_amount: Float!,
       shipping_address: String!,
       shipping_city: String!,
@@ -38,6 +37,8 @@ const orderTypeDefs = gql`
       shipping_country: String!
     ): OrderNew
     deleteProductOrder(order_new_id: ID!): String
+    updateOrderStatus(order_new_id: ID!, status: String!): OrderNew 
+
   }
 `;
 

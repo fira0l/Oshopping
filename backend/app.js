@@ -8,12 +8,17 @@ const fs = require('fs');
 const cors = require('cors');
 const db = require("./pgAdaptor").db;
 const schema = require('./src/schema');
+const orderRoute = require('./src/routes/orderRoute')
 
 // Create Express app
 const app = express();
 app.use(cors());
+app.use(express.json())
 
 const upload = multer({ dest: 'uploads/' });
+
+app.use('/order',orderRoute)
+
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 

@@ -3,7 +3,7 @@ import { useQuery, gql } from '@apollo/client';
 import moment from 'moment';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
-import RecentOrders from './RecentOrders';
+// import RecentOrders from './RecentOrders';
 
 const GET_ORDERS_QUERY = gql`
   query GetOrders {
@@ -20,10 +20,8 @@ const GET_ORDERS_QUERY = gql`
 `;
 
 const Dashboard = () => {
-  // Query for orders
   const { loading: ordersLoading, error: ordersError, data: ordersData } = useQuery(GET_ORDERS_QUERY);
 
-  // Handle loading and error states
   if (ordersLoading) return <p>Loading...</p>;
   if (ordersError) return <p>Error: {ordersError.message}</p>;
 
@@ -124,7 +122,7 @@ const Dashboard = () => {
       </div>
       <div className='mt-4'>
         <div>
-          <RecentOrders />
+          {/* <RecentOrders /> */}
         </div>
       </div>
     </div>

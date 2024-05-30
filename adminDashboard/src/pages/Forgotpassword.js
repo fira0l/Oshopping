@@ -1,32 +1,63 @@
-
-import React from 'react'
-import CustomInput from '../components/CustomInput'
+import React, { useState } from 'react';
+import { useMutation, gql } from '@apollo/client';
 
 const Forgotpassword = () => {
-  return (
-    <div className='py-5' style={{background: '#3DA9D1', minHeight: '100vh'}}>
-    <br /> 
-    <br /> 
-    <br /> 
-    <br /> 
-    <br /> 
-   <div className='my-5 w-25 bg-white rounded-3 mx-auto p-4'>
-    <h3 className='text-center title'>Forgot Password</h3>
-    <p className='text-center'> Please enter your registered email address</p>
-    <form action=''>
-      <CustomInput type= "text" label="Email Address" id="email" />
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
 
-      <button
-        className='border-0 px-3 py-2 text-white fw-bold w-100'
-        style={{background: '#3DA9D1'}}
-        type='submit'
-      >
-        Send Link
-      </button>
-    </form>
-   </div>
-  </div>
-  )
+  const FORGET_MUTATION = gql`
+    mutation ForgetPassword($email: String!) {
+      changePasswordAdmin(email: $email) {
+        admin_id
+      }
+    }
+  `;
+
+  const [changePasswordAdmin, { loading }] = useMutation(FORGET_MUTATION);
+
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const { data } = await changePasswordAdmin({ variables: { email } });
+      setMessage('Password reset link sent to your email');
+      setError('');
+    } catch (error) {
+      setMessage('');
+      setError(error.message || 'An error occurred while processing your request');
+    }
+  };
+
+  return (
+    <div className='min-h-screen flex justify-center items-center bg-blue-400'>
+      <div className='w-96 bg-white p-8 rounded-lg shadow-md'>
+        <h3 className='text-2xl font-semibold text-center mb-4'>Forgot Password</h3>
+        <p className='text-center'>Please enter your registered email address</p>
+        <form onSubmit={handleSubmit}>
+          <input 
+            type="text" 
+            className='w-full px-4 py-2 mt-4 border rounded-md focus:outline-none focus:ring-blue-400' 
+            placeholder="Email Address" 
+            value={email}
+            onChange={handleEmailChange} 
+          />
+          <button
+            className='w-full mt-4 py-2 bg-blue-500 text-white font-semibold rounded-md shadow-md transition duration-300 ease-in-out hover:bg-blue-600'
+            type='submit'
+            disabled={loading}
+          >
+            {loading ? 'Sending...' : 'Send Link'}
+          </button>
+        </form>
+        {message && <p className='text-green-500 text-center mt-4'>{message}</p>}
+        {error && <p className='text-red-500 text-center mt-4'>{error}</p>}
+      </div>
+    </div>
+  );
 }
 
 export default Forgotpassword;

@@ -140,10 +140,10 @@ CREATE TABLE Wishlist (
     FOREIGN KEY (user_id) REFERENCES Users(user_id),
     FOREIGN KEY (product_id) REFERENCES Products(product_id)
 );
-CREATE TABLE User_Sessions (
+CREATE TABLE user_sessions (
     session_id BIGSERIAL PRIMARY KEY  ,
     user_id INT,
     session_token VARCHAR(255),
     expiration_time TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES Users(user_id)
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
 );

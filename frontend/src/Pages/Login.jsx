@@ -1,8 +1,6 @@
 import React, { useState, useContext } from 'react';
 import './CSS/Login.css';
-import login_image from '../components/Assets/background/login-page-2.jpg';
-import { FaUser } from 'react-icons/fa6';
-import { IoMdLock } from "react-icons/io";
+import { FaEye, FaEyeSlash } from 'react-icons/fa6';
 import { Link, useNavigate } from 'react-router-dom';
 import { gql, useMutation } from '@apollo/client';
 import { ShopContext } from '../Context/ShopContext';
@@ -10,14 +8,17 @@ import { ShopContext } from '../Context/ShopContext';
 const LOGIN_USER = gql`
   mutation LoginUser($username: String!, $password: String!) {
     login(username: $username, password: $password) {
-      user_id
-      username
-      email
-      first_name
-      last_name
-      address
-      phone_number
-      registration_date
+      user { 
+        user_id
+        username
+        email
+        first_name
+        last_name
+        address
+        phone_number
+        registration_date
+      }
+      token
     }
   }
 `;
@@ -28,6 +29,7 @@ const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [passwordVisible, setPasswordVisible] = useState(false);
 
   const [loginUser, { loading }] = useMutation(LOGIN_USER);
 
@@ -36,8 +38,16 @@ const Login = () => {
     try {
       setErrorMessage('');
       const { data } = await loginUser({ variables: { username, password } });
-      setUser(data.login); // Store user in context
-      navigate('/checkout');
+  
+      if (data && data.login && data.login.token) {
+        const authToken = data.login.token;
+        localStorage.setItem('authToken', authToken);
+        
+        setUser(data.login.user); // Store user in context
+        navigate('/checkout');
+      } else {
+        throw new Error('Invalid response from server');
+      }
     } catch (error) {
       setErrorMessage('Incorrect username or password. Please try again.');
       setUsername('');
@@ -45,38 +55,41 @@ const Login = () => {
     }
   };
 
-  return (
-    <div className='body' style={{backgroundImage: `url(${login_image})`}}>
-      <div className="box">
-        <span className="borderLine"></span>
+  const togglePasswordVisibility = () => {
+    setPasswordVisible(!passwordVisible);
+  };
 
+  return (
+    <div className='body'>
+      <div className="box">
         <form onSubmit={handleLogin}>
           <h2>Sign in</h2>
           <div className="inputBox">
             <input
               type="text"
+              placeholder='username'
               required
               value={username}
               onChange={(e) => setUsername(e.target.value)}
             />
-            <span>Username<FaUser/></span>
-            <i className='bx bxs-user'></i>
           </div>
 
           <div className="inputBox">
             <input
-              type="password"
+              type={passwordVisible ? "text" : "password"}
+              placeholder='password'
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            <span>Password <IoMdLock/></span>
-            <i className='bx bxs-lock-alt'></i>
+            <span className="toggle-password" onClick={togglePasswordVisibility}>
+              {passwordVisible ? <FaEyeSlash /> : <FaEye />}
+            </span>
           </div>
 
           <div className="remember-forgot">
             <div className="forgot-password">
-              <Link to="/forgot">Forgot Password</Link>
+              <Link to="/forgot">Forgot Password?</Link>
             </div>
           </div>
 
@@ -85,7 +98,7 @@ const Login = () => {
 
           <div className="register-link">
             <p>Don't have an account?</p>
-            <h2><Link to="/signup">Sign Up</Link></h2>
+            <h3><Link to="/signup">Sign Up</Link></h3>
           </div>
         </form>
       </div>

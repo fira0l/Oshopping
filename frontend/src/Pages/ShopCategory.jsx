@@ -74,7 +74,9 @@ const ShopCategory = (props) => {
           <div key={product.product_id}>
             <Link to={`/product/${product.product_id}`}>
               <img src={product.image} alt={product.name} />
-              <p>{product.name} - {product.product_id}, {product.seller_id}</p>
+              <p>{product.name}</p>
+              <h1>{product.price} Birr</h1>
+
             </Link>
           </div>
         ))}

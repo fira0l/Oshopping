@@ -43,14 +43,14 @@ const orderResolvers = {
   Mutation: {
     orderProduct: async (_, args) => {
       try {
-        const { user_id, product_id, status, total_amount, shipping_address, shipping_city, postal_code, quantity, unit_price, shipping_country } = args;
+        const { user_id, product_id,  total_amount, shipping_address, shipping_city, postal_code, quantity, unit_price, shipping_country } = args;
 
         // Insert the new order into the database
         const newOrder = await db.one(
-          `INSERT INTO order_new (user_id, product_id, status, total_amount, shipping_address, shipping_city, postal_code, quantity, unit_price, shipping_country) 
-           VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) 
+          `INSERT INTO order_new (user_id, product_id,  total_amount, shipping_address, shipping_city, postal_code, quantity, unit_price, shipping_country) 
+           VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) 
            RETURNING *`,
-          [user_id, product_id, status, total_amount, shipping_address, shipping_city, postal_code, quantity, unit_price, shipping_country]
+          [user_id, product_id, total_amount, shipping_address, shipping_city, postal_code, quantity, unit_price, shipping_country]
         );
 
         return newOrder;
@@ -59,6 +59,25 @@ const orderResolvers = {
         throw new Error(`Failed to create order: ${err.message}`);
       }
     },
+
+    updateOrderStatus: async (_, { order_new_id, status }) => {
+      try {
+        // Update the order status in the database
+        const updatedOrder = await db.one(
+          `UPDATE order_new 
+           SET status = $1
+           WHERE order_new_id = $2
+           RETURNING *`,
+          [status, order_new_id]
+        );
+
+        return updatedOrder;
+      } catch (err) {
+        console.error('Failed to update order status:', err);
+        throw new Error(`Failed to update order status: ${err.message}`);
+      }
+    },
+
     deleteProductOrder: async (_, { order_new_id }) => {
       try {
         const result = await db.result('DELETE FROM order_new WHERE order_new_id = $1', [order_new_id]);
@@ -93,4 +112,7 @@ const orderResolvers = {
   },
 };
 
-module.exports = orderResolvers;
+module.exports = {
+  resolvers: orderResolvers,
+  orderProduct: orderResolvers.Mutation.orderProduct
+};

@@ -29,7 +29,15 @@ const adminTypeDefs = gql`
       phone_number: String!
     ): Admin
     adminLogin(email: String!, password: String!): Admin
+    changePasswordAdmin(email: String!): Admin
+    resetPasswordAdmin(token: String!, password: String!): ResetPasswordResponse
+
   }
+
+  type ResetPasswordResponse {
+    message: String
+  }
+
 `;
 
 module.exports = adminTypeDefs;

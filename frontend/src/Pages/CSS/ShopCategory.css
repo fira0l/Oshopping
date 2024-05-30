@@ -6,11 +6,12 @@
   margin-top: -25px;
   background: #e7e5e5;
   margin-bottom: -20px;
+  padding-bottom: 20px; /* Added padding to bottom to create space */
 }
 
 .shopcategory-indexSort {
   display: flex;
-  justify-content: flex-end; /* Align to right */
+  justify-content: flex-end; 
   align-items: center;
   margin-right: 50px;
   margin-left: 10px;
@@ -21,11 +22,48 @@
 .shopcategory-products {
   margin: 20px 50px;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 30px;
 }
 
+.shopcategory-products img{
+  width: 100%; 
+  height: 70%; 
+  object-fit: cover; 
+}
+
+.shopcategory-products div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.shopcategory-products p {
+  font-size: 18px; 
+  font-family: Arial, sans-serif; 
+  font-weight: 550; 
+  margin-top: 10px;
+  text-align: center;
+}
+
+.shopcategory-products h1 {
+  font-size: 16px; 
+  font-family: Arial, sans-serif; 
+  font-weight: 550; 
+  margin-top: 5px; 
+  text-align: center;
+}
+
 /* Responsive styles for tablets */
+@media (max-width: 1400px) {
+  .shopcategory-products {
+    margin: 20px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-left: 80px;
+  }
+}
+
 @media (max-width: 1285px) {
   .shopcategory-products {
     margin: 20px;
@@ -53,8 +91,6 @@
 
 /* Responsive styles for larger phones */
 @media (max-width: 774px) {
-
-
   .shopcategory-products {
     grid-template-columns: repeat(2, 1fr);
     gap: 15px;
@@ -63,7 +99,6 @@
 
 /* Responsive styles for larger tablets */
 @media (max-width: 974px) {
-
   .shopcategory-products {
     margin-top: 20px;
     grid-template-columns: repeat(2, 1fr);

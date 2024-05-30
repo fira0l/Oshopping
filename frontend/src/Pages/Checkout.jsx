@@ -1,60 +1,13 @@
 import React, { useContext, useState, useEffect } from 'react';
 import './CSS/Checkout.css';
 import { ShopContext } from '../Context/ShopContext';
-import { useMutation, useQuery, gql } from '@apollo/client';
 import Popup from './Popup';
-import moment from 'moment';
+import { useMutation, useQuery, gql } from '@apollo/client';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom'; 
 import OrderHistory from './OrderHistory';
 
-const ORDER_PRODUCT = gql`
-  mutation OrderProduct(
-    $user_id: ID!,
-    $product_id: ID!,
-    $status: String!,
-    $total_amount: Float!,
-    $shipping_address: String!,
-    $shipping_city: String!,
-    $postal_code: String!,
-    $quantity: Int!,
-    $unit_price: Float!,
-    $shipping_country: String!
-  ) {
-    orderProduct(
-      user_id: $user_id,
-      product_id: $product_id,
-      status: $status,
-      total_amount: $total_amount,
-      shipping_address: $shipping_address,
-      shipping_city: $shipping_city,
-      postal_code: $postal_code,
-      quantity: $quantity,
-      unit_price: $unit_price,
-      shipping_country: $shipping_country
-    ) {
-      order_new_id
-      user_id
-      product_id
-      order_date
-      status
-      total_amount
-      quantity
-      unit_price
-      shipping_address
-      shipping_city
-      postal_code
-      shipping_country
-    }
-  }
-`;
-
-const DECREASE_STOCK_QUANTITY = gql`
-  mutation DecreaseStockQuantity($product_id: ID!, $quantity: Int!) {
-    decreaseStockQuantity(product_id: $product_id, quantity: $quantity) {
-      product_id
-      stock_quantity
-    }
-  }
-`;
+const ORDER_API_URL = 'http://localhost:1000/order/orderProduct';
 
 const GET_ORDER_HISTORY_BY_USER_ID = gql`
   query GetOrderHistoryByUserId($user_id: ID!) {
@@ -76,19 +29,27 @@ const GET_ORDER_HISTORY_BY_USER_ID = gql`
   }
 `;
 
+const DECREASE_STOCK_QUANTITY = gql`
+  mutation DecreaseStockQuantity($product_id: ID!, $quantity: Int!) {
+    decreaseStockQuantity(product_id: $product_id, quantity: $quantity) {
+      product_id
+      stock_quantity
+    }
+  }
+`;
+
 const Checkout = () => {
   const { user, cartItems, getTotalCartCount, getTotalCartAmount, allProducts, clearCart } = useContext(ShopContext);
-  const [orderProduct] = useMutation(ORDER_PRODUCT);
-  const [decreaseStockQuantity] = useMutation(DECREASE_STOCK_QUANTITY);
-  const [currentPage, setCurrentPage] = useState(1); 
+  const [currentPage, setCurrentPage] = useState(1);
   const { loading, error, data } = useQuery(GET_ORDER_HISTORY_BY_USER_ID, {
-    variables: { user_id: user ? user.user_id : null }, // Ensure user is not null
+    variables: { user_id: user ? user.user_id : null },
   });
 
-  const handlePageChange = (page) => {
-    setCurrentPage(page); 
-  };
+  const [decreaseStockQuantity] = useMutation(DECREASE_STOCK_QUANTITY);
 
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
 
   const [billingData, setBillingData] = useState({
     shipping_address: '',
@@ -99,7 +60,13 @@ const Checkout = () => {
   });
   const [errors, setErrors] = useState({});
   const [buttonPopup, setButtonPopup] = useState(false);
+  const authToken = localStorage.getItem('authToken');
+  const navigate = useNavigate();
   const [showOrderHistory, setShowOrderHistory] = useState(false);
+
+  useEffect(() => {
+    console.log("User object:", user);
+  }, [user]);
 
   useEffect(() => {
     validateBillingAndAmount();
@@ -123,32 +90,13 @@ const Checkout = () => {
     }
 
     setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
-  const statusTimeline = [
-    { status: 'Processing', daysOffset: 0 },
-    { status: 'Shipped', daysOffset: 1 },
-    { status: 'Out for Delivery', daysOffset: 2 },
-    { status: 'Delivered', daysOffset: 3 },
-  ];
+  const handlePlaceOrder = async (e) => {
+    e.preventDefault();
+    if (!validateBillingAndAmount() || getTotalCartCount() === 0) return;
 
-// Define function to get current status
-const getCurrentStatus = (orderDate) => {
-  const today = moment();
-  for (let i = statusTimeline.length - 1; i >= 0; i--) {
-    const statusDate = moment(orderDate).add(statusTimeline[i].daysOffset, 'days');
-    if (today.isSameOrAfter(statusDate, 'day')) {
-      return statusTimeline[i].status;
-    }
-  }
-  return 'Processing';
-};
-
-const handlePlaceOrder = async (e) => {
-  e.preventDefault();
-  validateBillingAndAmount();
-
-  if (Object.keys(errors).length === 0 && getTotalCartCount() > 0) {
     try {
       const { shipping_address, shipping_city, postal_code, shipping_country } = billingData;
 
@@ -156,33 +104,35 @@ const handlePlaceOrder = async (e) => {
         const product = allProducts.find(p => p.product_id === itemId);
         if (product && cartItems[itemId] > 0) {
           const total_amount = cartItems[itemId] * product.price;
-          const orderDate = moment(); // Assuming order date is current date for simplicity, replace it with the actual order date if available
-          return orderProduct({
-            variables: {
-              user_id: user.user_id,
-              product_id: itemId,
-              status: getCurrentStatus(orderDate),
-              total_amount,
-              shipping_address,
-              shipping_city,
-              postal_code,
-              quantity: cartItems[itemId],
-              unit_price: product.price,
-              shipping_country
+          const orderData = {
+            user_id: user.user_id,
+            product_id: itemId,
+            total_amount,
+            shipping_address,
+            shipping_city,
+            postal_code,
+            quantity: cartItems[itemId],
+            unit_price: product.price,
+            shipping_country
+          };
+
+          console.log("Order Data:", orderData);
+
+          const config = {
+            headers: {
+              Authorization: `${authToken}`,
+              'Content-Type': 'application/json'
             }
-          }).then(() => decreaseStockQuantity({
-            variables: {
-              product_id: itemId,
-              quantity: cartItems[itemId]
-            }
-          }));
+          };
+
+          await axios.post(ORDER_API_URL, orderData, config);
+          await decreaseStockQuantity({ variables: { product_id: itemId, quantity: cartItems[itemId] } });
         }
       });
 
       await Promise.all(orderPromises);
 
       setButtonPopup(true);
-
       clearCart();
       setBillingData({
         shipping_address: '',
@@ -193,21 +143,21 @@ const handlePlaceOrder = async (e) => {
       });
     } catch (error) {
       console.error('Error placing order:', error);
-      setErrors(prev => ({ ...prev, general: 'An error occurred while placing the order. Please try again.' }));
+      if (error.response && error.response.status === 401) {
+        navigate('/login');
+      } else {
+        setErrors(prev => ({ ...prev, general: 'An error occurred while placing the order. Please try again.' }));
+      }
     }
-  }
-};
+  };
 
-  
   const toggleOrderHistory = () => {
     setShowOrderHistory(!showOrderHistory);
   };
-  
 
   return (
     <div className="checkout">
       <h2>Checkout</h2>
-
       {!showOrderHistory && (
         <div className="lefty">
           <div className="checkout-left">
@@ -264,7 +214,7 @@ const handlePlaceOrder = async (e) => {
                 />
                 {errors.shipping_country && <p className="error">{errors.shipping_country}</p>}
               </div>
-            </form>
+                          </form>
           </div>
 
           <div className="checkout-right">
@@ -294,13 +244,27 @@ const handlePlaceOrder = async (e) => {
                 {errors.amount && <p className="error">{errors.amount}</p>}
               </div>
 
-              <button
+              {/* <button
                 className="btn"
                 type="submit"
                 onClick={handlePlaceOrder}
+                disabled={getTotalCartCount() === 0} // Disable the button if cart is empty
+
               >
                 Place Order
-              </button>
+              </button> */}
+
+              {getTotalCartCount() > 0 ? (
+                <button
+                  className="btn"
+                  type="submit"
+                  onClick={handlePlaceOrder}
+                >
+                  Place Order
+                </button>
+              ) : (
+                <p>Please add items to your cart before placing an order</p>
+              )}
 
               {errors.general && <p className="error">{errors.general}</p>}
             </div>
@@ -308,19 +272,17 @@ const handlePlaceOrder = async (e) => {
         </div>
       )}
 
-<OrderHistory
-  orders={data ? data.orderNewsByUserId : []}
-  currentPage={currentPage}
-  handlePageChange={handlePageChange}
-  loading={loading}
-  error={error}
-  toggleOrderHistory={toggleOrderHistory}
-  showOrderHistory={showOrderHistory}
-  user={user}
-  data={data}
-/>
-
-
+      <OrderHistory
+        orders={data ? data.orderNewsByUserId : []}
+        currentPage={currentPage}
+        handlePageChange={handlePageChange}
+        loading={loading}
+        error={error}
+        toggleOrderHistory={toggleOrderHistory}
+        showOrderHistory={showOrderHistory}
+        user={user}
+        data={data}
+      />
 
       <Popup trigger={buttonPopup} setTrigger={setButtonPopup} />
     </div>
@@ -328,3 +290,4 @@ const handlePlaceOrder = async (e) => {
 };
 
 export default Checkout;
+           

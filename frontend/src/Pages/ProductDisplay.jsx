@@ -60,8 +60,7 @@ const ProductDisplay = () => {
           <div className="productdisplay-right-price-new">{product.price} Birr</div>
         </div>
         <div className="productdisplay-right-description">
-          {product.description}
-          <p className="productdisplay-right-stock">Stock Quantity: {product.stock_quantity}</p> {/* Display stock quantity */}
+          <p className="productdisplay-right-stock">Stock Quantity: {product.stock_quantity}</p> 
         </div>
         <div className='productdisplay-right-quantity'>
           <label htmlFor='quantity'>Quantity:</label>
@@ -76,7 +75,6 @@ const ProductDisplay = () => {
         </div>
         <button onClick={handleAddToCart} disabled={product.stock_quantity === 0}>Add To Cart</button> {/* Disable button if out of stock */}
         {errorMessage && <p className="error-message">{errorMessage}</p>}
-        <p className="productdisplay-right-category"><span>Category :</span> {categoryName}</p>
       </div>
     </div>
   );

@@ -1,33 +1,23 @@
-/* CSS for the sign-up form */
-.body {
+body {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 87vh;
+  min-height: 100vh;
   background-size: cover;
 }
 
 .form_container {
-  position: absolute;
-  max-width: 50%; /* Adjust the width as needed */
-  width: 100%;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 5;
-  background-color: #ffffff84;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 1);
-  padding: 10px;
+  position: relative;
+  max-width: 500px; /* Adjust for better responsiveness */
+  width: 90%;
+  margin: 40px auto;
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   border-radius: 8px;
-  opacity: 0;
-  pointer-events: none;
-}
-
-.form_container.active {
   opacity: 1;
   pointer-events: auto;
 }
-
 
 .form_container h3 {
   font-size: 25px;
@@ -36,18 +26,18 @@
 
 .input_container {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
 }
 
-.right_input,
-.left_input {
-  width: 44%; /* Adjust the width as needed */
+.input_container .right_input,
+.input_container .left_input {
+  width: 100%;
 }
 
 .input_box {
   position: relative;
   margin-top: 25px;
-  height: auto;
 }
 
 .input_box input {
@@ -62,23 +52,27 @@
 .input_box i {
   position: absolute;
   top: 50%;
-  left: 5%;
-  transform: translate(-50%, -50%);
+  left: 10px;
+  transform: translateY(-50%);
   font-size: 18px;
 }
 
-.input_box input:focus ~ i {
-  color: #1500ff;
+.toggle-password {
+  position: absolute;
+  right: 20px;
+  top: 17px;
+  cursor: pointer;
+  color: black;
 }
 
 
 .form_container button {
+  display: block;
   background-color: #1500ff;
   color: #fff;
   border: none;
   outline: none;
-  margin-top: 30px;
-  margin-left: 190px;
+  margin: 30px auto 0;
   padding: 12px;
   border-radius: 8px;
   width: 50%;
@@ -86,6 +80,7 @@
   letter-spacing: 1px;
   cursor: pointer;
   font-weight: 600;
+  text-align: center;
 }
 
 .form_container button:hover {
@@ -96,4 +91,11 @@
   font-size: 14px;
   margin-top: 12px;
   text-align: center;
+}
+
+@media (min-width: 600px) {
+  .input_container .right_input,
+  .input_container .left_input {
+    width: 48%;
+  }
 }

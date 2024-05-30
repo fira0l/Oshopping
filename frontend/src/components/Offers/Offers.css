@@ -69,15 +69,19 @@
   }
   30%
   {
-      background-image: url('../Assets/background/banner-2.jpg');
+      background-image: url('../Assets/background/young-adults-embrace-fashionable-city-night.jpg');
   }
   50%
   {
-      background-image: url('../Assets/background/blog-2.jpg');
+      background-image: url('../Assets/background/Well-Dressed-Man.jpg');
   }
   70%
   {
       background-image: url('../Assets/background/shopping-single.jpg');
+  }
+  90%
+  {
+      background-image: url('../Assets/background/sport-fashion-with-empty-copy-space-happy-sporty-male-smiling.jpg');
   }
 }
 

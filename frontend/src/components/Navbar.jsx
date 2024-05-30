@@ -2,17 +2,24 @@ import React, { useState, useContext } from 'react';
 import './Navbar.css';
 import logo from './Assets/logo/icons8-shopping-bag-94.png';
 import cart_icon from './Assets/icons/icons8-shopping-cart-50.png';
-import { Link } from 'react-router-dom';
+import { Link,  useNavigate } from 'react-router-dom';
 import { ShopContext } from '../Context/ShopContext';
 import { FaBars, FaTimes } from 'react-icons/fa';
 
 const Navbar = () => {
-  const { getTotalCartCount } = useContext(ShopContext);
+  const { getTotalCartCount, user, setUser } = useContext(ShopContext);
   const [nav, setNav] = useState(false); 
+  const navigate = useNavigate();
 
   // Function to toggle the navigation menu
   const toggleNav = () => {
     setNav((prevNav) => !prevNav);
+  };
+
+  // Function to handle logout
+  const handleLogout = () => {
+    navigate('/');
+    setUser(null); // Clear the user context
   };
 
   return (
@@ -38,7 +45,11 @@ const Navbar = () => {
 
       <div className="nav-login-cart">
         <Link className="link" to="/contactus"><h5 className="contact-us">Contact Us</h5></Link>
-        <Link to="/login"><button>Login</button></Link>
+        {user ? (
+          <button onClick={handleLogout}>Logout</button>
+        ) : (
+          <Link to="/login"><button>Login</button></Link>
+        )}
         <Link to="/cart">
           <img src={cart_icon} alt="" />
           <div className="nav-cart-count">{getTotalCartCount()}</div>
@@ -59,9 +70,13 @@ const Navbar = () => {
             </Link>
           </li>
           <li className="mobile-login-cart">
-            <Link onClick={toggleNav} to="/login">
-              Login
-            </Link>
+            {user ? (
+              <button onClick={handleLogout}>Logout</button>
+            ) : (
+              <Link onClick={toggleNav} to="/login">
+                Login
+              </Link>
+            )}
           </li>
           <li className="mobile-login-cart">
             <Link onClick={toggleNav} to="/cart">
@@ -76,4 +91,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
