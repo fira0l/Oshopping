@@ -13,7 +13,7 @@
     "@types/react-dropzone": "^4.2.0",
     "antd": "^5.16.5",
     "apollo-upload-client": "^18.0.1",
-    "axios": "^1.7.4",
+    "axios": "^1.6.8",
     "bootstrap": "^5.3.3",
     "browser-image-compression": "^2.0.2",
     "cloudinary": "^2.2.0",
