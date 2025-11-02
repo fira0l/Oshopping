@@ -61,7 +61,7 @@ const ShopCategory = ({ category }) => {
 
   // Filter products based on category
   const filterByCategory = (products, category) => {
-    return products.filter((product) => product.category_id == category);
+    return products.filter((product) => product.category_id === category);
   };
 
   // Filter products based on search query

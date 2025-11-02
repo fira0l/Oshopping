@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 import { Card, CardContent } from '../ui/card';
-import { ArrowRight, ShoppingBag, Star, Truck, Shield, Sparkles, Crown, Zap } from 'lucide-react';
+import { ArrowRight, Star, Shield, Sparkles, Crown, Zap } from 'lucide-react';
 
 const Beauty = () => {
   const navigate = useNavigate();

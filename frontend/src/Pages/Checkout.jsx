@@ -74,7 +74,7 @@ const Checkout = () => {
 
   useEffect(() => {
     validateBillingAndAmount();
-  }, [billingData, getTotalCartAmount]);
+  }, [billingData, getTotalCartAmount, validateBillingAndAmount]);
 
   const handleBillingDataChange = (e) => {
     const { name, value } = e.target;
