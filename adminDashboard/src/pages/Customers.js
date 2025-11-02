@@ -24,55 +24,7 @@ const GET_USERS_QUERY = gql`
 const Customers = () => {
   const { loading, error, data } = useQuery(GET_USERS_QUERY);
 
-  const columns = [
-    {
-      title: 'User ID',
-      dataIndex: 'user_id',
-    },
-    {
-      title: 'Username',
-      dataIndex: 'username',
-    },
-    {
-      title: 'Email',
-      dataIndex: 'email',
-    },
-    {
-      title: 'First Name',
-      dataIndex: 'first_name',
-    },
-    {
-      title: 'Last Name',
-      dataIndex: 'last_name',
-    },
-    {
-      title: 'Address',
-      dataIndex: 'address',
-    },
-    {
-      title: 'Phone Number',
-      dataIndex: 'phone_number',
-    },
-    {
-      title: 'Registration Date',
-      dataIndex: 'registration_date',
-      render: (registrationDate) => {
-        // Log the raw registration date for debugging
-        console.log('Raw registration date:', registrationDate);
 
-        // Convert and format the registration date
-        const formattedDate = moment(Number(registrationDate)).isValid()
-          ? moment(Number(registrationDate)).format('YYYY-MM-DD')
-          : 'Invalid Date';
-
-        // Log the formatted date for debugging
-        console.log('Formatted registration date:', formattedDate);
-
-        return formattedDate;
-      },
-    },
-
-  ];
 
   if (loading) return (
     <div className="flex items-center justify-center h-64">

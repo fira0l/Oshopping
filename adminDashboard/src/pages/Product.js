@@ -70,8 +70,8 @@ const Product = () => {
   const [productNameForUpload, setProductNameForUpload] = useState('');
 
   const [createProduct] = useMutation(ADD_PRODUCT_MUTATION);
-  const { loading: categoriesLoading, data: categoriesData } = useQuery(GET_CATEGORIES_QUERY);
-  const { loading: sellersLoading, data: sellersData } = useQuery(GET_SELLERS_QUERY);
+  const { data: categoriesData } = useQuery(GET_CATEGORIES_QUERY);
+  const { data: sellersData } = useQuery(GET_SELLERS_QUERY);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
