@@ -1,9 +1,17 @@
 import React, { useState } from 'react';
 import { useMutation, useQuery, gql } from '@apollo/client';
-import { message, Select } from 'antd';
 import Upload from './ExampleComponent';
-
-const { Option } = Select;
+import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
+import { Button } from '../components/ui/button';
+import { Input } from '../components/ui/input';
+import { Badge } from '../components/ui/badge';
+import { Plus, Package } from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '../components/ui/dropdown-menu';
 
 const ADD_PRODUCT_MUTATION = gql`
   mutation CreateProduct(
@@ -80,7 +88,7 @@ const Product = () => {
           stock_quantity: parseInt(stockQuantity),
         },
       });
-      message.success('Product added successfully');
+      // Success message - you can add toast notification here
       setProductNameForUpload(name); // Preserve the product name for upload
       // Clear other form fields but not the name
       setDescription('');
@@ -90,82 +98,165 @@ const Product = () => {
       setSellerId('');
     } catch (err) {
       console.error('Error creating product:', err);
-      message.error(err.message || 'Failed to add product');
+      console.error('Failed to add product:', err.message);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div style={{ position: 'relative' }}>
-      <h3 className='mb-4 title'>Add Product</h3>
-      <div>
-        {loading && <p>Submitting...</p>}
-        <form onSubmit={handleSubmit}>
-          <div className="mb-3">
-            <label htmlFor="productName" className="form-label">Product Name:</label>
-            <input type="text" className="form-control" id="productName" value={name} onChange={e => setName(e.target.value)} required />
-          </div>
-          <div className="mb-3">
-            <label htmlFor="productDescription" className="form-label">Product Description:</label>
-            <input type="text" className="form-control" id="productDescription" value={description} onChange={e => setDescription(e.target.value)} required />
-          </div>
-          <div className="mb-3">
-            <label htmlFor="productPrice" className="form-label">Product Price:</label>
-            <input 
-              type="number" 
-              className="form-control" 
-              id="productPrice" 
-              value={price} 
-              onChange={e => {
-                const newValue = e.target.value;
-                // Check if the new value is valid (greater than 0)
-                if (newValue > 0 || newValue === '') {
-                  setPrice(newValue);
-                }
-              }} 
-              step="0.01" 
-              required 
-            />
-          </div>
-          <div className="mb-3">
-            <label htmlFor="productQuantity" className="form-label">Product Quantity:</label>
-            <input 
-              type="number" 
-              className="form-control" 
-              id="productQuantity" 
-              value={stockQuantity} 
-              onChange={e => {
-                const newValue = e.target.value;
-                // Check if the new value is valid (greater than 0)
-                if (newValue > 0 || newValue === '') {
-                  setStockQuantity(newValue);
-                }
-              }} 
-              required 
-            />
-          </div>
+    <div className="space-y-6 p-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">Add Product</h1>
+          <p className="text-muted-foreground">Create a new product for your inventory</p>
+        </div>
+        <Badge variant="outline" className="flex items-center gap-2">
+          <Package className="h-4 w-4" />
+          New Product
+        </Badge>
+      </div>
 
-          <div className="mb-3">
-            <label htmlFor="categoryId" className="form-label">Category:</label>
-            <Select value={categoryId} onChange={value => setCategoryId(value)} style={{ width: '100%' }} loading={categoriesLoading}>
-              {categoriesData && categoriesData.getAllCategories.map(category => (
-                <Option key={category.category_id} value={category.category_id}>{category.name}</Option>
-              ))}
-            </Select>
-          </div>
-          <div className="mb-3">
-            <label htmlFor="sellerId" className="form-label">Seller:</label>
-            <Select value={sellerId} onChange={value => setSellerId(value)} style={{ width: '100%' }} loading={sellersLoading}>
-              {sellersData && sellersData.sellers.map(seller => (
-                <Option key={seller.seller_id} value={seller.seller_id}>{seller.username}</Option>
-              ))}
-            </Select>
-          </div>
-          <button className='btn btn-success border-0 rounded-3 my-5' type="submit">Add Product</button>
-        </form>
+      <div className="grid gap-6 lg:grid-cols-2">
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Plus className="h-5 w-5" />
+              Product Details
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {loading && (
+              <div className="mb-4 p-3 bg-primary/10 text-primary rounded-md text-sm">
+                Submitting product...
+              </div>
+            )}
+            
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="space-y-2">
+                <label htmlFor="productName" className="text-sm font-medium">Product Name *</label>
+                <Input 
+                  type="text" 
+                  id="productName" 
+                  value={name} 
+                  onChange={e => setName(e.target.value)} 
+                  placeholder="Enter product name"
+                  required 
+                />
+              </div>
+              
+              <div className="space-y-2">
+                <label htmlFor="productDescription" className="text-sm font-medium">Description *</label>
+                <Input 
+                  type="text" 
+                  id="productDescription" 
+                  value={description} 
+                  onChange={e => setDescription(e.target.value)} 
+                  placeholder="Enter product description"
+                  required 
+                />
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <label htmlFor="productPrice" className="text-sm font-medium">Price (Birr) *</label>
+                  <Input 
+                    type="number" 
+                    id="productPrice" 
+                    value={price} 
+                    onChange={e => {
+                      const newValue = e.target.value;
+                      if (newValue > 0 || newValue === '') {
+                        setPrice(newValue);
+                      }
+                    }} 
+                    step="0.01" 
+                    placeholder="0.00"
+                    required 
+                  />
+                </div>
+                
+                <div className="space-y-2">
+                  <label htmlFor="productQuantity" className="text-sm font-medium">Stock Quantity *</label>
+                  <Input 
+                    type="number" 
+                    id="productQuantity" 
+                    value={stockQuantity} 
+                    onChange={e => {
+                      const newValue = e.target.value;
+                      if (newValue > 0 || newValue === '') {
+                        setStockQuantity(newValue);
+                      }
+                    }} 
+                    placeholder="0"
+                    required 
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Category *</label>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" className="w-full justify-start">
+                      {categoryId ? 
+                        categoriesData?.getAllCategories.find(cat => cat.category_id === categoryId)?.name || 'Select Category'
+                        : 'Select Category'
+                      }
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-full">
+                    {categoriesData?.getAllCategories.map(category => (
+                      <DropdownMenuItem 
+                        key={category.category_id} 
+                        onClick={() => setCategoryId(category.category_id)}
+                      >
+                        {category.name}
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+              
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Seller *</label>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" className="w-full justify-start">
+                      {sellerId ? 
+                        sellersData?.sellers.find(seller => seller.seller_id === sellerId)?.username || 'Select Seller'
+                        : 'Select Seller'
+                      }
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-full">
+                    {sellersData?.sellers.map(seller => (
+                      <DropdownMenuItem 
+                        key={seller.seller_id} 
+                        onClick={() => setSellerId(seller.seller_id)}
+                      >
+                        {seller.username}
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+              
+              <Button type="submit" disabled={loading} className="w-full" size="lg">
+                {loading ? 'Adding Product...' : 'Add Product'}
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
         
-        <Upload name={productNameForUpload} clearForm={() => setName('')} />
+        <Card>
+          <CardHeader>
+            <CardTitle>Product Image</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Upload name={productNameForUpload} clearForm={() => setName('')} />
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

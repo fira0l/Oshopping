@@ -41,8 +41,14 @@ const ShopContextProvider = (props) => {
   const [cartItems, setCartItems] = useState({});
   const [user, setUser] = useState(null);
   
-  const { loading: loadingProducts, error: errorProducts, data: dataProducts } = useQuery(GET_ALL_PRODUCTS_QUERY);
-  const { loading: loadingCategories, error: errorCategories, data: dataCategories } = useQuery(GET_ALL_CATEGORIES_QUERY);
+  const { loading: loadingProducts, error: errorProducts, data: dataProducts } = useQuery(GET_ALL_PRODUCTS_QUERY, {
+    errorPolicy: 'all',
+    notifyOnNetworkStatusChange: true
+  });
+  const { loading: loadingCategories, error: errorCategories, data: dataCategories } = useQuery(GET_ALL_CATEGORIES_QUERY, {
+    errorPolicy: 'all',
+    notifyOnNetworkStatusChange: true
+  });
   
   // Mutation hook for decreasing stock quantity
   const [decreaseStockQuantityMutation] = useMutation(DECREASE_STOCK_QUANTITY_MUTATION);
@@ -127,15 +133,19 @@ const ShopContextProvider = (props) => {
   const contextValue = {
     getTotalCartCount,
     getTotalCartAmount,
-    allProducts: dataProducts ? dataProducts.products : [],
-    allCategories: dataCategories ? dataCategories.getAllCategories : [],
+    allProducts: dataProducts?.products || [],
+    allCategories: dataCategories?.getAllCategories || [],
     cartItems,
     addToCart,
     removeFromCart,
     user,
     setUser,
     clearCart,
-    decreaseStockQuantityMutation
+    decreaseStockQuantityMutation,
+    loadingProducts,
+    errorProducts,
+    loadingCategories,
+    errorCategories
   };
 
   return (

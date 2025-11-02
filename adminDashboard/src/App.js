@@ -11,6 +11,7 @@ import CategoryList from './pages/CategoryList';
 import ProductList from './pages/ProductList';
 import Category from './pages/Category';
 import Product from './pages/Product';
+import ProductDetail from './pages/ProductDetail';
 import { ApolloClient, InMemoryCache, ApolloProvider} from '@apollo/client';
 
 
@@ -34,6 +35,7 @@ function App() {
           <Route path='customers' element={<Customers/>}/>
           <Route path='list-category' element={<CategoryList/>}/>
           <Route path='product-list' element={<ProductList/>}/>
+          <Route path='product-detail/:id' element={<ProductDetail/>}/>
           <Route path='category' element={<Category/>}/>
           <Route path='product' element={<Product/>}/>  
 

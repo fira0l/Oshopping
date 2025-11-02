@@ -1,11 +1,15 @@
 import React, { useContext, useState, useEffect } from 'react';
-import './CSS/Checkout.css';
 import { ShopContext } from '../Context/ShopContext';
 import Popup from './Popup';
 import { useMutation, useQuery, gql } from '@apollo/client';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom'; 
 import OrderHistory from './OrderHistory';
+import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
+import { Button } from '../components/ui/button';
+import { Input } from '../components/ui/input';
+import { Badge } from '../components/ui/badge';
+import { ShoppingCart, MapPin, CreditCard } from 'lucide-react';
 
 const ORDER_API_URL = 'http://localhost:1000/order/orderProduct';
 
@@ -70,7 +74,7 @@ const Checkout = () => {
 
   useEffect(() => {
     validateBillingAndAmount();
-  }, [billingData]);
+  }, [billingData, getTotalCartAmount]);
 
   const handleBillingDataChange = (e) => {
     const { name, value } = e.target;
@@ -156,118 +160,134 @@ const Checkout = () => {
   };
 
   return (
-    <div className="checkout">
-      <h2>Checkout</h2>
+    <div className="container mx-auto px-4 py-8">
+      <div className="mt-60 mb-8">
+        <h1 className="text-4xl font-bold text-foreground mb-2">Checkout</h1>
+        <p className="text-muted-foreground">Complete your order</p>
+      </div>
+      
       {!showOrderHistory && (
-        <div className="lefty">
-          <div className="checkout-left">
-            <h2>Billing Details</h2>
-            <form>
-              <div className="form-group">
-                <label htmlFor="shipping_address">Shipping Address *</label>
-                <input
-                  type="text"
-                  id="shipping_address"
-                  name="shipping_address"
-                  placeholder="House number and street name"
-                  required
-                  value={billingData.shipping_address}
-                  onChange={handleBillingDataChange}
-                />
-                {errors.shipping_address && <p className="error">{errors.shipping_address}</p>}
-              </div>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="lg:col-span-2">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <MapPin className="h-5 w-5" />
+                  Billing Details
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <form className="space-y-6">
+                  <div className="space-y-2">
+                    <label htmlFor="shipping_address" className="text-sm font-medium">Shipping Address *</label>
+                    <Input
+                      type="text"
+                      id="shipping_address"
+                      name="shipping_address"
+                      placeholder="House number and street name"
+                      required
+                      value={billingData.shipping_address}
+                      onChange={handleBillingDataChange}
+                    />
+                    {errors.shipping_address && <p className="text-sm text-destructive">{errors.shipping_address}</p>}
+                  </div>
 
-              <div className="form-group">
-                <label htmlFor="shipping_city">Shipping City *</label>
-                <input
-                  type="text"
-                  id="shipping_city"
-                  name="shipping_city"
-                  required
-                  value={billingData.shipping_city}
-                  onChange={handleBillingDataChange}
-                />
-                {errors.shipping_city && <p className="error">{errors.shipping_city}</p>}
-              </div>
+                  <div className="space-y-2">
+                    <label htmlFor="shipping_city" className="text-sm font-medium">Shipping City *</label>
+                    <Input
+                      type="text"
+                      id="shipping_city"
+                      name="shipping_city"
+                      required
+                      value={billingData.shipping_city}
+                      onChange={handleBillingDataChange}
+                    />
+                    {errors.shipping_city && <p className="text-sm text-destructive">{errors.shipping_city}</p>}
+                  </div>
 
-              <div className="form-group">
-                <label htmlFor="postal_code">Postal Code *</label>
-                <input
-                  type="text"
-                  id="postal_code"
-                  name="postal_code"
-                  required
-                  value={billingData.postal_code}
-                  onChange={handleBillingDataChange}
-                />
-                {errors.postal_code && <p className="error">{errors.postal_code}</p>}
-              </div>
+                  <div className="space-y-2">
+                    <label htmlFor="postal_code" className="text-sm font-medium">Postal Code *</label>
+                    <Input
+                      type="text"
+                      id="postal_code"
+                      name="postal_code"
+                      required
+                      value={billingData.postal_code}
+                      onChange={handleBillingDataChange}
+                    />
+                    {errors.postal_code && <p className="text-sm text-destructive">{errors.postal_code}</p>}
+                  </div>
 
-              <div className="form-group">
-                <label htmlFor="shipping_country">Shipping Country *</label>
-                <input
-                  type="text"
-                  id="shipping_country"
-                  name="shipping_country"
-                  value={billingData.shipping_country}
-                  onChange={handleBillingDataChange}
-                />
-                {errors.shipping_country && <p className="error">{errors.shipping_country}</p>}
-              </div>
-                          </form>
+                  <div className="space-y-2">
+                    <label htmlFor="shipping_country" className="text-sm font-medium">Shipping Country *</label>
+                    <Input
+                      type="text"
+                      id="shipping_country"
+                      name="shipping_country"
+                      value={billingData.shipping_country}
+                      onChange={handleBillingDataChange}
+                    />
+                    {errors.shipping_country && <p className="text-sm text-destructive">{errors.shipping_country}</p>}
+                  </div>
+                </form>
+              </CardContent>
+            </Card>
           </div>
 
-          <div className="checkout-right">
-            <div className="cartitems-total">
-              <h1>Cart Total</h1>
-              <div>
-                <hr />
-                <div className="cartitems-total-item">
-                  <h3>Total</h3>
-                  <h3>{getTotalCartAmount()} Birr</h3>
+          <div className="lg:col-span-1">
+            <Card className="sticky top-20">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <ShoppingCart className="h-5 w-5" />
+                  Order Summary
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center pb-4 border-b">
+                    <span className="text-muted-foreground">Total Items</span>
+                    <Badge variant="secondary">{getTotalCartCount()}</Badge>
+                  </div>
+                  
+                  <div className="flex justify-between items-center text-lg font-semibold">
+                    <span>Total Amount</span>
+                    <span className="text-primary">{getTotalCartAmount()} Birr</span>
+                  </div>
                 </div>
-              </div>
-              <div className="cartitems-total-item">
-                <h3>Total Items</h3>
-                <h3>{getTotalCartCount()}</h3>
-              </div>
 
-              <div className="form-group">
-                <label htmlFor="amount">Enter Total Amount *</label>
-                <input
-                  type="number"
-                  id="amount"
-                  name="amount"
-                  value={billingData.amount}
-                  onChange={handleBillingDataChange}
-                />
-                {errors.amount && <p className="error">{errors.amount}</p>}
-              </div>
+                <div className="space-y-2">
+                  <label htmlFor="amount" className="text-sm font-medium flex items-center gap-2">
+                    <CreditCard className="h-4 w-4" />
+                    Confirm Amount *
+                  </label>
+                  <Input
+                    type="number"
+                    id="amount"
+                    name="amount"
+                    placeholder="Enter total amount"
+                    value={billingData.amount}
+                    onChange={handleBillingDataChange}
+                  />
+                  {errors.amount && <p className="text-sm text-destructive">{errors.amount}</p>}
+                </div>
 
-              {/* <button
-                className="btn"
-                type="submit"
-                onClick={handlePlaceOrder}
-                disabled={getTotalCartCount() === 0} // Disable the button if cart is empty
+                {getTotalCartCount() > 0 ? (
+                  <Button
+                    className="w-full"
+                    size="lg"
+                    onClick={handlePlaceOrder}
+                  >
+                    Place Order
+                  </Button>
+                ) : (
+                  <p className="text-center text-sm text-muted-foreground py-4">
+                    Please add items to your cart before placing an order
+                  </p>
+                )}
 
-              >
-                Place Order
-              </button> */}
-
-              {getTotalCartCount() > 0 ? (
-                <button
-                  className="btn"
-                  type="submit"
-                  onClick={handlePlaceOrder}
-                >
-                  Place Order
-                </button>
-              ) : (
-                <p>Please add items to your cart before placing an order</p>
-              )}
-
-              {errors.general && <p className="error">{errors.general}</p>}
-            </div>
+                {errors.general && <p className="text-sm text-destructive text-center">{errors.general}</p>}
+              </CardContent>
+            </Card>
           </div>
         </div>
       )}

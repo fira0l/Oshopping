@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Pagination } from 'antd';
+import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
+import { Button } from '../components/ui/button';
+import { Badge } from '../components/ui/badge';
+import { ChevronLeft, ChevronRight, Package, User, Calendar, MapPin } from 'lucide-react';
 
 const PAGE_SIZE = 10;
 
@@ -7,70 +10,120 @@ const OrderHistory = ({ orders, currentPage, handlePageChange, loading, error, t
   const [serialNumber, setSerialNumber] = useState(0);
 
   useEffect(() => {
-    // Reset serial number count whenever orders or currentPage changes
     setSerialNumber((currentPage - 1) * PAGE_SIZE);
   }, [orders, currentPage]);
 
-  return (
-    <div className="order-history-section">
-      <h2 className="cursor-pointer" onClick={toggleOrderHistory}>Order History</h2>
-      {showOrderHistory && user && data && (
-        <>
-          <div className="user-info">
-            <h3>Username: {user.username}</h3>
-          </div>
-          
-          <div className="order-history-table">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sno</th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product Image</th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order Date</th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Amount</th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Shipping Address</th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+  const totalPages = Math.ceil(orders.length / PAGE_SIZE);
 
-                  {/* Add more header columns as needed */}
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {loading ? (
-                  <tr>
-                    <td colSpan="5" className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Loading order history...</td>
-                  </tr>
-                ) : error ? (
-                  <tr>
-                    <td colSpan="5" className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Error fetching order history: {error.message}</td>
-                  </tr>
-                ) : (
-                  // Slice the data array based on the current page and page size
-                  orders
+  return (
+    <div className="mt-12">
+      <Button 
+        variant="outline" 
+        onClick={toggleOrderHistory}
+        className="mb-6"
+      >
+        <Package className="mr-2 h-4 w-4" />
+        {showOrderHistory ? 'Hide' : 'View'} Order History
+      </Button>
+
+      {showOrderHistory && user && data && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <User className="h-5 w-5" />
+              Order History - {user.username}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {loading ? (
+              <p className="text-center py-8 text-muted-foreground">Loading order history...</p>
+            ) : error ? (
+              <p className="text-center py-8 text-destructive">Error: {error.message}</p>
+            ) : orders.length === 0 ? (
+              <p className="text-center py-8 text-muted-foreground">No orders found</p>
+            ) : (
+              <>
+                <div className="space-y-4">
+                  {orders
                     .slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE)
                     .map((order, index) => (
-                      <tr key={order.order_new_id}>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{serialNumber + index + 1}</td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <img src={order.product.image} alt={order.product.name} className="w-12 h-12 object-cover" />
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{order.order_date}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{order.total_amount}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{order.shipping_address}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{order.status}</td>
-                        {/* Add more table cells as needed */}
-                      </tr>
-                    ))
+                      <Card key={order.order_new_id} className="overflow-hidden">
+                        <CardContent className="p-6">
+                          <div className="flex flex-col md:flex-row gap-6">
+                            <div className="flex-shrink-0">
+                              <img 
+                                src={order.product.image} 
+                                alt={order.product.name} 
+                                className="w-24 h-24 object-cover rounded-lg border"
+                              />
+                            </div>
+                            
+                            <div className="flex-1 space-y-3">
+                              <div className="flex items-start justify-between">
+                                <div>
+                                  <h3 className="font-semibold text-lg">{order.product.name}</h3>
+                                  <p className="text-sm text-muted-foreground">Order #{serialNumber + index + 1}</p>
+                                </div>
+                                <Badge variant={order.status === 'Delivered' ? 'default' : 'secondary'}>
+                                  {order.status}
+                                </Badge>
+                              </div>
+                              
+                              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                                <div className="flex items-center gap-2">
+                                  <Calendar className="h-4 w-4 text-muted-foreground" />
+                                  <span className="text-muted-foreground">Date:</span>
+                                  <span className="font-medium">{new Date(order.order_date).toLocaleDateString()}</span>
+                                </div>
+                                
+                                <div className="flex items-center gap-2">
+                                  <Package className="h-4 w-4 text-muted-foreground" />
+                                  <span className="text-muted-foreground">Amount:</span>
+                                  <span className="font-medium text-primary">{order.total_amount} Birr</span>
+                                </div>
+                                
+                                <div className="flex items-center gap-2">
+                                  <MapPin className="h-4 w-4 text-muted-foreground" />
+                                  <span className="text-muted-foreground">Address:</span>
+                                  <span className="font-medium truncate">{order.shipping_address}</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                </div>
+
+                {totalPages > 1 && (
+                  <div className="flex items-center justify-center gap-2 mt-6">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handlePageChange(currentPage - 1)}
+                      disabled={currentPage === 1}
+                    >
+                      <ChevronLeft className="h-4 w-4" />
+                    </Button>
+                    
+                    <span className="text-sm text-muted-foreground">
+                      Page {currentPage} of {totalPages}
+                    </span>
+                    
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handlePageChange(currentPage + 1)}
+                      disabled={currentPage === totalPages}
+                    >
+                      <ChevronRight className="h-4 w-4" />
+                    </Button>
+                  </div>
                 )}
-              </tbody>
-            </table>
-          </div>
-          <Pagination
-            current={currentPage}
-            total={orders.length}
-            pageSize={PAGE_SIZE}
-            onChange={handlePageChange}
-          />
-        </>
+              </>
+            )}
+          </CardContent>
+        </Card>
       )}
     </div>
   );

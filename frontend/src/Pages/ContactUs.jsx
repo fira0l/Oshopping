@@ -19,7 +19,7 @@ const ContactUs = () => {
           <div className="p-6 bg-white rounded-lg shadow-custom">
             <h3 className="text-xl font-semibold mb-4">Returns</h3>
             <p className="mb-4">For information on returns and refunds.</p>
-            <p className="font-bold">letera@mail.com</p>
+            <p className="font-bold">firaolanbessa170@gmail.com</p>
           </div>
           <div className="p-6 bg-white rounded-lg shadow-custom">
             <h3 className="text-xl font-semibold mb-4">Marketing</h3>

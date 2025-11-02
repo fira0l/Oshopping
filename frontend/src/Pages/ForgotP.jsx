@@ -16,7 +16,7 @@ const ForgotP = () => {
   const [message, setMessage] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
 
-  const [ForgetPassword, { loading, error }] = useMutation(FORGET_MUTATION, {
+  const [ForgetPassword, { loading }] = useMutation(FORGET_MUTATION, {
     onCompleted: (data) => {
       setMessage('Password reset email sent successfully.');
       setErrorMessage(null);

@@ -1,6 +1,13 @@
 import React, { useState } from 'react';
-import { Table, Button, message, Popconfirm } from 'antd';
 import { useQuery, useMutation, gql } from '@apollo/client';
+import { useNavigate } from 'react-router-dom';
+import { Button } from '../components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
+import { Badge } from '../components/ui/badge';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../components/ui/table';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '../components/ui/dialog';
+import { Input } from '../components/ui/input';
+import { Edit, Trash2, Package, Plus, Eye } from 'lucide-react';
 
 const GET_PRODUCTS = gql`
   {
@@ -44,7 +51,7 @@ const DELETE_PRODUCT = gql`
 `;
 
 const ProductList = () => {
-  const [currentPage, setCurrentPage] = useState(1);
+  const navigate = useNavigate();
   const { loading: productsLoading, error: productsError, data, refetch: refetchProducts } = useQuery(GET_PRODUCTS);
   const { loading: categoriesLoading, error: categoriesError, data: categoriesData } = useQuery(GET_CATEGORIES);
   const [updateStockQuantityMutation] = useMutation(UPDATE_STOCK_QUANTITY);
@@ -55,17 +62,21 @@ const ProductList = () => {
     return category ? category.name : 'Unknown';
   };
 
+  const [editingStock, setEditingStock] = useState(null);
+  const [newStockQuantity, setNewStockQuantity] = useState('');
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [productToDelete, setProductToDelete] = useState(null);
+
   const handleUpdateStockQuantity = async (productId, stockQuantity) => {
     try {
-      // eslint-disable-next-line no-unused-vars
-      const { data } = await updateStockQuantityMutation({
-        variables: { product_id: productId, stock_quantity: stockQuantity + 1 } 
+      await updateStockQuantityMutation({
+        variables: { product_id: productId, stock_quantity: parseInt(newStockQuantity) } 
       });
-      message.success('Stock quantity updated successfully');
-      refetchProducts(); // Refetch products after updating stock
+      setEditingStock(null);
+      setNewStockQuantity('');
+      refetchProducts();
     } catch (error) {
       console.error('Error updating stock quantity:', error.message);
-      message.error('Failed to update stock quantity');
     }
   };
 
@@ -74,87 +85,186 @@ const ProductList = () => {
       await deleteProductMutation({
         variables: { product_id: productId }
       });
-      message.success('Product deleted successfully');
-      refetchProducts(); // Refetch products after deleting
+      setDeleteDialogOpen(false);
+      setProductToDelete(null);
+      refetchProducts();
     } catch (error) {
       console.error('Error deleting product:', error.message);
-      message.error('Failed to delete product');
     }
   };
 
-  const columns = [
-    {
-      title: 'SNo',
-      dataIndex: 'sno',
-      key: 'sno',
-      render: (text, record, index) => index + 1 + (currentPage - 1) * 10,
-    },
-    {
-      title: 'Image',
-      dataIndex: 'image',
-      key: 'image',
-      render: (image) => <img src={image} alt="Product" style={{ width: 50, height: 50 }} />,
-    },
-    {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
-    },
-    {
-      title: 'Category',
-      dataIndex: 'category_id',
-      key: 'category',
-      render: (category_id) => getCategoryNameById(category_id),
-    },
-    {
-      title: 'Price',
-      dataIndex: 'price',
-      key: 'price',
-    },
-    {
-      title: 'Stock Quantity',
-      dataIndex: 'stock_quantity',
-      key: 'stock_quantity',
-    },
-    {
-      title: 'Action',
-      key: 'action',
-      render: (text, record) => (
-        <>
-          <Button type="primary" onClick={() => handleUpdateStockQuantity(record.product_id, record.stock_quantity)}>Edit Stock 1</Button>
-          <Popconfirm
-            title="Are you sure you want to delete this product?"
-            onConfirm={() => handleDeleteProduct(record.product_id)}
-            okText="Yes"
-            cancelText="No"
-          >
-            <Button type="danger" style={{ marginLeft: 10, color: 'red' }}>Delete</Button>
-          </Popconfirm>
-        </>
-      ),
-    },
-  ];
-
-  if (productsLoading || categoriesLoading) return <p>Loading...</p>;
-  if (productsError || categoriesError) return <p>Error: {productsError || categoriesError}</p>;
-
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
+  const openDeleteDialog = (product) => {
+    setProductToDelete(product);
+    setDeleteDialogOpen(true);
   };
 
-  const productsWithSNo = data.products.map((product, index) => ({ ...product, sno: index }));
+  const openEditStock = (product) => {
+    setEditingStock(product.product_id);
+    setNewStockQuantity(product.stock_quantity.toString());
+  };
+
+
+
+  if (productsLoading || categoriesLoading) return (
+    <div className="flex items-center justify-center h-64">
+      <div className="text-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+        <p>Loading products...</p>
+      </div>
+    </div>
+  );
+  
+  if (productsError || categoriesError) return (
+    <div className="flex items-center justify-center h-64">
+      <div className="text-center text-destructive">
+        <p>Error loading products: {productsError?.message || categoriesError?.message}</p>
+      </div>
+    </div>
+  );
 
   return (
-    <div>
-      <h3 className='mb-4 title'>Products</h3>
-      <div>
-        <Table
-          columns={columns}
-          dataSource={productsWithSNo}
-          rowKey="product_id"
-          pagination={{ onChange: handlePageChange }}
-        />
+    <div className="space-y-6 p-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">Products</h1>
+          <p className="text-muted-foreground">
+            Manage your product inventory and stock levels
+          </p>
+        </div>
+        <Button>
+          <Plus className="h-4 w-4 mr-2" />
+          Add Product
+        </Button>
       </div>
+
+      {/* Products Table */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Package className="h-5 w-5" />
+            Product Inventory ({data.products.length} items)
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Image</TableHead>
+                <TableHead>Name</TableHead>
+                <TableHead>Category</TableHead>
+                <TableHead>Price</TableHead>
+                <TableHead>Stock</TableHead>
+                <TableHead>Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {data.products.map((product) => (
+                <TableRow key={product.product_id}>
+                  <TableCell>
+                    <img 
+                      src={product.image || '/placeholder-product.jpg'} 
+                      alt={product.name}
+                      className="w-12 h-12 object-cover rounded-md"
+                    />
+                  </TableCell>
+                  <TableCell className="font-medium">{product.name}</TableCell>
+                  <TableCell>
+                    <Badge variant="outline">
+                      {getCategoryNameById(product.category_id)}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>{product.price} Birr</TableCell>
+                  <TableCell>
+                    <Badge 
+                      variant={product.stock_quantity < 10 ? "destructive" : "default"}
+                    >
+                      {product.stock_quantity}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex items-center gap-2">
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        onClick={() => navigate(`/admin/product-detail/${product.product_id}`)}
+                      >
+                        <Eye className="h-4 w-4" />
+                      </Button>
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        onClick={() => openEditStock(product)}
+                      >
+                        <Edit className="h-4 w-4" />
+                      </Button>
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        onClick={() => openDeleteDialog(product)}
+                        className="text-destructive hover:text-destructive"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
+
+      {/* Edit Stock Dialog */}
+      <Dialog open={editingStock !== null} onOpenChange={() => setEditingStock(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Update Stock Quantity</DialogTitle>
+            <DialogDescription>
+              Enter the new stock quantity for this product.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="py-4">
+            <Input
+              type="number"
+              value={newStockQuantity}
+              onChange={(e) => setNewStockQuantity(e.target.value)}
+              placeholder="Enter stock quantity"
+            />
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setEditingStock(null)}>
+              Cancel
+            </Button>
+            <Button onClick={() => handleUpdateStockQuantity(editingStock, newStockQuantity)}>
+              Update Stock
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Delete Product</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete "{productToDelete?.name}"? This action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setDeleteDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button 
+              variant="destructive" 
+              onClick={() => handleDeleteProduct(productToDelete?.product_id)}
+            >
+              Delete Product
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

@@ -2,6 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useMutation, gql } from '@apollo/client';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
+import { Button } from '../components/ui/button';
+import { Input } from '../components/ui/input';
+import { LogIn, Mail, Lock } from 'lucide-react';
 
 const LOGIN_MUTATION = gql`
   mutation AdminLogin($email: String!, $password: String!) {
@@ -52,45 +56,67 @@ const Login = () => {
   };
 
   return (
-    <div className="d-flex justify-content-center align-items-center" style={{ background: '#3DA9D1', minHeight: '100vh' }}>
-      <div className="card shadow" style={{ width: '300px' }}>
-        <div className="card-body">
-          <h3 className="text-center mb-4">Login</h3>
-          <form onSubmit={handleLogin}>
-            <div className="mb-3">
-              <input
-                type="email"
-                className="form-control"
-                placeholder="Email address"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
+    <div className="min-h-screen bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center p-4">
+      <Card className="w-full max-w-md shadow-2xl">
+        <CardHeader className="text-center">
+          <CardTitle className="text-3xl font-bold flex items-center justify-center gap-2">
+            <LogIn className="h-8 w-8" />
+            Admin Login
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleLogin} className="space-y-6">
+            <div className="space-y-2">
+              <div className="relative">
+                <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                <Input
+                  type="email"
+                  placeholder="Email address"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="pl-10"
+                />
+              </div>
             </div>
-            <div className="mb-3">
-              <input
-                type="password"
-                className="form-control"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
+            
+            <div className="space-y-2">
+              <div className="relative">
+                <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                <Input
+                  type="password"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="pl-10"
+                />
+              </div>
             </div>
-            <div className="mb-3 text-end">
-              <Link to="forgot-password">Forgot password?</Link>
+            
+            <div className="text-right">
+              <Link to="forgot-password" className="text-sm text-primary hover:underline">
+                Forgot password?
+              </Link>
             </div>
-            {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
-            <button
-              className="btn btn-primary w-100"
+            
+            {errorMessage && (
+              <div className="p-3 text-sm text-destructive bg-destructive/10 border border-destructive/20 rounded-md">
+                {errorMessage}
+              </div>
+            )}
+            
+            <Button
               type="submit"
               disabled={loading}
-              style={{ marginTop: '10px' }}
-            > Login
-            </button>
+              className="w-full"
+              size="lg"
+            >
+              {loading ? 'Signing in...' : 'Sign In'}
+            </Button>
           </form>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };

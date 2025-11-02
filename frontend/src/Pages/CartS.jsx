@@ -1,8 +1,10 @@
 import React, { useContext } from 'react';
-import './CSS/CartS.css';
 import { ShopContext } from '../Context/ShopContext';
-import { FaTimes } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import { Button } from '../components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
+import { Badge } from '../components/ui/badge';
+import { Trash2, ShoppingCart } from 'lucide-react';
 
 const CartS = () => {
   const { getTotalCartAmount, allProducts, cartItems, removeFromCart, user } = useContext(ShopContext);
@@ -16,58 +18,110 @@ const CartS = () => {
     }
   };
 
+  const cartProducts = allProducts.filter(product => cartItems[product.product_id] > 0);
+  const isEmpty = cartProducts.length === 0;
+
   return (
-    <div className='cartitems'>
-      <h1>Cart</h1>
-      <div className="cartitems-format-main">
-        <p>Products</p>
-        <p>Title</p>
-        <p>Price</p>
-        <p>Quantity</p>
-        <p>Total</p>
-        <p>Remove</p>
+    <div className="container mx-auto px-4 py-8">
+      <div className="flex items-center gap-2 mb-8">
+        <ShoppingCart className="h-6 w-6" />
+        <h1 className="text-3xl font-bold">Shopping Cart</h1>
+        {!isEmpty && (
+          <Badge variant="secondary" className="ml-2">
+            {cartProducts.length} items
+          </Badge>
+        )}
       </div>
-      <hr />
-      {allProducts.map((product) => {
-        if (cartItems[product.product_id] > 0) {
-          return (
-            <div key={product.product_id}>
-              <div className='cartitems-format cartitems-format-main'>
-                <img src={product.image} alt="" className='carticon-product-icon' />
-                <p>{product.name}</p>
-                <p>{product.price}Birr</p>
-                <button className='cartitems-quantity'>{cartItems[product.product_id]}</button>
-                <p>{product.price * cartItems[product.product_id]}Birr</p>
-                <FaTimes onClick={() => removeFromCart(product.product_id)} className='cartitems-remove-icon' />
-              </div>
-              <hr />
-            </div>
-          );
-        }
-        return null;
-      })}
-      <div className="cartitems-down">
-        <div className="cartitems-total">
-          <h1>Cart Total</h1>
-          <div>
-            <div className="cartitems-total-item">
-              <p>Subtotal</p>
-              <p>{getTotalCartAmount()}Birr</p>
-            </div>
-            <hr />
-            <div className="cartitems-total-item">
-              <p>Shipping Fee</p>
-              <p>Free</p>
-            </div>
-            <hr />
-            <div className="cartitems-total-item">
-              <h3>Total</h3>
-              <h3>{getTotalCartAmount()}Birr</h3>
-            </div>
+
+      {isEmpty ? (
+        <Card className="text-center py-12">
+          <CardContent>
+            <ShoppingCart className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
+            <h2 className="text-xl font-semibold mb-2">Your cart is empty</h2>
+            <p className="text-muted-foreground mb-6">Add some products to get started</p>
+            <Button onClick={() => navigate('/')}>Continue Shopping</Button>
+          </CardContent>
+        </Card>
+      ) : (
+        <div className="grid lg:grid-cols-3 gap-8">
+          {/* Cart Items */}
+          <div className="lg:col-span-2 space-y-4">
+            {cartProducts.map((product) => (
+              <Card key={product.product_id}>
+                <CardContent className="p-6">
+                  <div className="flex items-center gap-4">
+                    <img 
+                      src={product.image || '/placeholder-product.jpg'} 
+                      alt={product.name}
+                      className="w-20 h-20 object-cover rounded-md"
+                    />
+                    <div className="flex-1">
+                      <h3 className="font-semibold text-lg">{product.name}</h3>
+                      <p className="text-muted-foreground">{product.price} Birr each</p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Badge variant="outline">
+                        Qty: {cartItems[product.product_id]}
+                      </Badge>
+                    </div>
+                    <div className="text-right">
+                      <p className="font-semibold text-lg">
+                        {product.price * cartItems[product.product_id]} Birr
+                      </p>
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        onClick={() => removeFromCart(product.product_id)}
+                        className="text-destructive hover:text-destructive"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
           </div>
-          <button onClick={handleCheckout}>Proceed to Checkout</button>
+
+          {/* Order Summary */}
+          <div className="lg:col-span-1">
+            <Card className="sticky top-4">
+              <CardHeader>
+                <CardTitle>Order Summary</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex justify-between">
+                  <span>Subtotal</span>
+                  <span>{getTotalCartAmount()} Birr</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Shipping</span>
+                  <span className="text-green-600">Free</span>
+                </div>
+                <hr />
+                <div className="flex justify-between text-lg font-semibold">
+                  <span>Total</span>
+                  <span>{getTotalCartAmount()} Birr</span>
+                </div>
+                <Button 
+                  onClick={handleCheckout} 
+                  className="w-full" 
+                  size="lg"
+                >
+                  Proceed to Checkout
+                </Button>
+                <Button 
+                  variant="outline" 
+                  onClick={() => navigate('/')} 
+                  className="w-full"
+                >
+                  Continue Shopping
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
