@@ -6,7 +6,6 @@
 [functions]
   node_bundler = "esbuild"
   external_node_modules = ["express-graphql", "graphql-express"]
-  ignore = "app.js"
 
 [[redirects]]
   from = "/api/*"
