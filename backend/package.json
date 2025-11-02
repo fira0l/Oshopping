@@ -8,7 +8,7 @@
     "start": "node index.js",
     "dev": "nodemon app.js",
     "build": "echo 'Build complete'",
-    "dev": "netlify dev"
+    "netlify": "netlify dev"
   },
   "author": "",
   "license": "ISC",
