@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon app.js"
+    "start": "nodemon app.js",
+    "build": "echo 'Build complete'",
+    "dev": "netlify dev"
   },
   "author": "",
   "license": "ISC",
@@ -31,6 +33,7 @@
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.9.13",
     "nodemon": "^3.1.10",
-    "pg-promise": "^11.6.0"
+    "pg-promise": "^11.6.0",
+    "apollo-server-lambda": "^3.13.0"
   }
 }
