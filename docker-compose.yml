@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15
+    container_name: oshop_postgres
+    environment:
+      POSTGRES_DB: oshop_db
+      POSTGRES_USER: oshop_user
+      POSTGRES_PASSWORD: oshop_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - oshop_network
+
+  # Backend API
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: oshop_backend
+    ports:
+      - "4000:4000"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=postgresql://oshop_user:oshop_password@postgres:5432/oshop_db
+    depends_on:
+      - postgres
+    networks:
+      - oshop_network
+
+  # Frontend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: oshop_frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - oshop_network
+
+  # Admin Dashboard
+  admin:
+    build:
+      context: ./adminDashboard
+      dockerfile: Dockerfile
+    container_name: oshop_admin
+    ports:
+      - "3001:80"
+    depends_on:
+      - backend
+    networks:
+      - oshop_network
+
+volumes:
+  postgres_data:
+
+networks:
+  oshop_network:
+    driver: bridge
