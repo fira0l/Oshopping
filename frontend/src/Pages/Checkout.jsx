@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect, useCallback } from 'react';
 import { ShopContext } from '../Context/ShopContext';
 import Popup from './Popup';
 import { useMutation, useQuery, gql } from '@apollo/client';
@@ -72,16 +72,7 @@ const Checkout = () => {
     console.log("User object:", user);
   }, [user]);
 
-  useEffect(() => {
-    validateBillingAndAmount();
-  }, [billingData, getTotalCartAmount, validateBillingAndAmount]);
-
-  const handleBillingDataChange = (e) => {
-    const { name, value } = e.target;
-    setBillingData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const validateBillingAndAmount = () => {
+  const validateBillingAndAmount = useCallback(() => {
     const { shipping_address, shipping_city, postal_code, shipping_country, amount } = billingData;
     const newErrors = {};
 
@@ -95,6 +86,15 @@ const Checkout = () => {
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
+  }, [billingData, getTotalCartAmount]);
+
+  useEffect(() => {
+    validateBillingAndAmount();
+  }, [validateBillingAndAmount]);
+
+  const handleBillingDataChange = (e) => {
+    const { name, value } = e.target;
+    setBillingData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handlePlaceOrder = async (e) => {
